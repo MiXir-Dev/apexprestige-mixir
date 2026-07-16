@@ -15,7 +15,7 @@ pages.
 - React Router
 - Tailwind CSS
 - Radix UI and shadcn-style components
-- Netlify hosting and Netlify Forms
+- Netlify hosting and a server-side Telegram quote notification function
 
 ## Commands
 
