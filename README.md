@@ -1,43 +1,25 @@
-# Mr. Clear Lavage de vitres professionnel
+# Apex Prestige Services Extérieurs
 
-https://mrclear.ca/
+Production website for Apex Prestige Services Extérieurs:
 
-Ce projet représente le site officiel de **Mr. Clear**, une entreprise de services de lavage de vitres résidentiels et commerciaux, opérant principalement sur la Rive-Nord de Montréal, incluant les villes de Terrebonne, Mascouche, Repentigny, Boisbriand, Lorraine, Rosemère, Bois-des-Filion, ainsi que Laval et Montréal.
+https://www.apexprestige.ca/
 
-L'objectif du site est de fournir une plateforme moderne, responsive et optimisée pour le référencement local, permettant aux clients de :
-- Découvrir les services offerts (vitres intérieures, extérieures, vidage de gouttières)
-- Obtenir une soumission rapide et simple
-- Consulter les zones desservies
-- Lire des témoignages clients
-- Contacter l’entreprise directement
+The site presents residential and commercial exterior services, a native Netlify
+submission form, the complete service territory, and ten localized service-area
+pages.
 
-Le site est construit en React + Vite + TypeScript, avec Tailwind CSS, Radix UI, et des composants modernes pour offrir une expérience fluide sur tous les appareils.
+## Stack
 
----
+- React 18 and TypeScript
+- Vite
+- React Router
+- Tailwind CSS
+- Radix UI and shadcn-style components
+- Netlify hosting and Netlify Forms
 
-## MiXir — Créateurs de sites web pour petites entreprises
+## Commands
 
-Ce site a été conçu et développé par **MiXir**, une agence web basée à Montréal, spécialisée dans la création de sites web professionnels pour les petites et moyennes entreprises.
-
-Nous accompagnons les entrepreneurs locaux en :
-- Créant des interfaces modernes et adaptatives
-- Optimisant la visibilité grâce au SEO local
-- Offrant des forfaits clés en main (nom de domaine, déploiement, maintenance, SEO, design)
-
-🎯 Depuis plusieurs années, nous aidons les commerces, travailleurs autonomes et PME à développer leur présence en ligne.  
-📦 Nous proposons également des **plans abordables pour les particuliers** qui souhaitent un site personnel ou vitrine.
-
----
-
-### 🛠️ Stack technologique
-
-- **React 18** + **TypeScript**
-- **Vite** pour un développement rapide
-- **Tailwind CSS** + **shadcn/ui** pour un design propre
-- **Radix UI** pour l’accessibilité
-- **React Hook Form** + **Zod** pour les formulaires
-- **Embla Carousel** pour les carrousels visuels
-
----
-
-https://mrclear.ca/
+- `npm run dev`
+- `npm run lint`
+- `npm run build`
+- `npm run preview`
