@@ -1,244 +1,262 @@
-"""Lossless PNG optimizer for recursively compressing files in place."""
+"""Recursively replace raster images in ``public`` with lossless WebP files.
+
+The original image is removed only after cwebp successfully creates and the
+script validates its replacement. SVG, ICO, GIF, and existing WebP files are
+intentionally left unchanged.
+"""
 
 from __future__ import annotations
 
 import argparse
-import binascii
-import os
 from dataclasses import dataclass
+import os
 from pathlib import Path
-import struct
+import shutil
+import subprocess
 import sys
 import tempfile
 import time
-import zlib
-
-PNG_SIGNATURE = b"\x89PNG\r\n\x1a\n"
-IDAT = b"IDAT"
-IEND = b"IEND"
 
 
-@dataclass
-class OptimizeResult:
-  path: Path
+SUPPORTED_EXTENSIONS = {".jpeg", ".jpg", ".png", ".tif", ".tiff"}
+REPO_ROOT = Path(__file__).resolve().parent.parent
+PUBLIC_ROOT = REPO_ROOT / "public"
+
+
+@dataclass(frozen=True)
+class ConversionResult:
+  source: Path
+  destination: Path
   before_size: int
   after_size: int
-  changed: bool
+  converted: bool
   error: str | None = None
 
 
-def parse_chunks(png_bytes: bytes) -> list[tuple[bytes, bytes]]:
-  if not png_bytes.startswith(PNG_SIGNATURE):
-    raise ValueError("Not a PNG file (invalid signature).")
-
-  offset = len(PNG_SIGNATURE)
-  chunks: list[tuple[bytes, bytes]] = []
-
-  while offset < len(png_bytes):
-    if offset + 8 > len(png_bytes):
-      raise ValueError("Corrupt PNG: truncated chunk header.")
-
-    length = struct.unpack(">I", png_bytes[offset : offset + 4])[0]
-    chunk_type = png_bytes[offset + 4 : offset + 8]
-    data_start = offset + 8
-    data_end = data_start + length
-    crc_start = data_end
-    crc_end = crc_start + 4
-
-    if crc_end > len(png_bytes):
-      raise ValueError("Corrupt PNG: truncated chunk data.")
-
-    payload = png_bytes[data_start:data_end]
-    expected_crc = struct.unpack(">I", png_bytes[crc_start:crc_end])[0]
-    actual_crc = binascii.crc32(chunk_type)
-    actual_crc = binascii.crc32(payload, actual_crc) & 0xFFFFFFFF
-
-    if expected_crc != actual_crc:
-      raise ValueError(f"Corrupt PNG: CRC mismatch in chunk {chunk_type!r}.")
-
-    chunks.append((chunk_type, payload))
-    offset = crc_end
-
-    if chunk_type == IEND:
-      break
-
-  if not chunks or chunks[-1][0] != IEND:
-    raise ValueError("Corrupt PNG: missing IEND chunk.")
-
-  return chunks
+def find_images(root: Path) -> list[Path]:
+  """Return supported raster images below root in a stable order."""
+  return sorted(
+    path
+    for path in root.rglob("*")
+    if path.is_file() and path.suffix.lower() in SUPPORTED_EXTENSIONS
+  )
 
 
-def encode_chunks(chunks: list[tuple[bytes, bytes]]) -> bytes:
-  out = bytearray(PNG_SIGNATURE)
-  for chunk_type, payload in chunks:
-    out.extend(struct.pack(">I", len(payload)))
-    out.extend(chunk_type)
-    out.extend(payload)
-    crc = binascii.crc32(chunk_type)
-    crc = binascii.crc32(payload, crc) & 0xFFFFFFFF
-    out.extend(struct.pack(">I", crc))
-  return bytes(out)
+def build_conversion_plan(images: list[Path]) -> tuple[dict[Path, Path], list[str]]:
+  """Choose non-overwriting output names and report any remaining conflicts."""
+  default_destinations: dict[Path, list[Path]] = {}
+  for source in images:
+    destination = source.with_suffix(".webp")
+    default_destinations.setdefault(destination, []).append(source)
+
+  plan: dict[Path, Path] = {}
+  conflicts: list[str] = []
+  reserved = {path for path in PUBLIC_ROOT.rglob("*.webp") if path.is_file()}
+
+  for default_destination, sources in default_destinations.items():
+    use_disambiguated_names = len(sources) > 1 or default_destination in reserved
+    for source in sources:
+      if use_disambiguated_names:
+        extension = source.suffix.lower().removeprefix(".")
+        destination = source.with_name(f"{source.stem}-{extension}.webp")
+      else:
+        destination = default_destination
+
+      if destination in reserved:
+        conflicts.append(
+          f"{source} cannot become {destination}: destination already exists"
+        )
+        continue
+
+      plan[source] = destination
+      reserved.add(destination)
+
+  return plan, conflicts
 
 
-def recompress_idat(idat_data: bytes, thorough: bool) -> bytes:
-  raw_data = zlib.decompress(idat_data)
-  best = idat_data
-
-  passes: list[tuple[int, int]] = [
-    (9, zlib.Z_DEFAULT_STRATEGY),
-    (9, zlib.Z_FILTERED),
-  ]
-  if thorough:
-    passes.extend(
-      [
-        (8, zlib.Z_DEFAULT_STRATEGY),
-        (8, zlib.Z_FILTERED),
-        (9, zlib.Z_HUFFMAN_ONLY),
-        (9, zlib.Z_RLE),
-      ]
-    )
-
-  for mem_level, strategy in passes:
-    compressor = zlib.compressobj(
-      level=zlib.Z_BEST_COMPRESSION,
-      method=zlib.DEFLATED,
-      wbits=15,
-      memLevel=mem_level,
-      strategy=strategy,
-    )
-    candidate = compressor.compress(raw_data) + compressor.flush()
-    if len(candidate) < len(best):
-      best = candidate
-
-  return best
+def is_webp(path: Path) -> bool:
+  """Check the WebP RIFF signature without relying on the file extension."""
+  with path.open("rb") as image_file:
+    header = image_file.read(12)
+  return (
+    len(header) == 12
+    and header[:4] == b"RIFF"
+    and header[8:12] == b"WEBP"
+  )
 
 
-def optimize_png(path: Path, dry_run: bool, thorough: bool) -> OptimizeResult:
-  original = path.read_bytes()
-  before_size = len(original)
+def describe_size_change(before_size: int, after_size: int) -> str:
+  if before_size == 0 or before_size == after_size:
+    return "same size"
+
+  percentage = abs(before_size - after_size) / before_size * 100
+  direction = "smaller" if after_size < before_size else "larger"
+  return f"{percentage:.2f}% {direction}"
+
+
+def convert_image(
+  source: Path,
+  destination: Path,
+  cwebp: str,
+  dry_run: bool,
+) -> ConversionResult:
+  before_size = source.stat().st_size
+  temp_path: Path | None = None
 
   try:
-    chunks = parse_chunks(original)
-    idat_payload = b"".join(payload for chunk_type, payload in chunks if chunk_type == IDAT)
-    if not idat_payload:
-      raise ValueError("PNG has no IDAT chunk.")
+    with tempfile.NamedTemporaryFile(
+      dir=source.parent,
+      prefix=f".{source.stem}-",
+      suffix=".webp.tmp",
+      delete=False,
+    ) as temp_file:
+      temp_path = Path(temp_file.name)
 
-    optimized_idat = recompress_idat(idat_payload, thorough=thorough)
-    if len(optimized_idat) >= len(idat_payload):
-      return OptimizeResult(path=path, before_size=before_size, after_size=before_size, changed=False)
+    process = subprocess.run(
+      [
+        cwebp,
+        "-lossless",
+        "-z",
+        "9",
+        "-exact",
+        "-metadata",
+        "all",
+        "-quiet",
+        str(source),
+        "-o",
+        str(temp_path),
+      ],
+      check=False,
+      capture_output=True,
+      text=True,
+    )
+    if process.returncode != 0:
+      message = process.stderr.strip() or process.stdout.strip() or "cwebp failed"
+      raise RuntimeError(message)
 
-    new_chunks: list[tuple[bytes, bytes]] = []
-    wrote_idat = False
-    for chunk_type, payload in chunks:
-      if chunk_type == IDAT:
-        if not wrote_idat:
-          new_chunks.append((IDAT, optimized_idat))
-          wrote_idat = True
-      else:
-        new_chunks.append((chunk_type, payload))
+    if temp_path.stat().st_size == 0 or not is_webp(temp_path):
+      raise RuntimeError("cwebp produced an invalid WebP file")
 
-    optimized = encode_chunks(new_chunks)
-    after_size = len(optimized)
-    if after_size >= before_size:
-      return OptimizeResult(path=path, before_size=before_size, after_size=before_size, changed=False)
+    after_size = temp_path.stat().st_size
+    if dry_run:
+      return ConversionResult(
+        source=source,
+        destination=destination,
+        before_size=before_size,
+        after_size=after_size,
+        converted=True,
+      )
 
-    if not dry_run:
-      with tempfile.NamedTemporaryFile(dir=path.parent, delete=False, suffix=".png") as tmp:
-        tmp.write(optimized)
-        tmp_path = Path(tmp.name)
-      os.replace(tmp_path, path)
-
-    return OptimizeResult(path=path, before_size=before_size, after_size=after_size, changed=True)
-  except Exception as exc:  # noqa: BLE001
-    return OptimizeResult(
-      path=path,
+    os.replace(temp_path, destination)
+    temp_path = None
+    source.unlink()
+    return ConversionResult(
+      source=source,
+      destination=destination,
+      before_size=before_size,
+      after_size=after_size,
+      converted=True,
+    )
+  except (OSError, RuntimeError) as exc:
+    return ConversionResult(
+      source=source,
+      destination=destination,
       before_size=before_size,
       after_size=before_size,
-      changed=False,
+      converted=False,
       error=str(exc),
     )
-
-
-def find_png_files(root: Path) -> list[Path]:
-  return sorted(
-    file_path
-    for file_path in root.rglob("*")
-    if file_path.is_file() and file_path.suffix.lower() == ".png"
-  )
+  finally:
+    if temp_path is not None:
+      temp_path.unlink(missing_ok=True)
 
 
 def main() -> int:
   parser = argparse.ArgumentParser(
-    description="Recursively apply lossless PNG optimization in place."
-  )
-  parser.add_argument(
-    "--root",
-    default="public",
-    help="Directory to scan recursively (default: public).",
+    description=(
+      "Recursively replace supported images in public/ with lossless WebP files."
+    )
   )
   parser.add_argument(
     "--dry-run",
     action="store_true",
-    help="Show what would change without writing files.",
-  )
-  parser.add_argument(
-    "--thorough",
-    action="store_true",
-    help="Try additional compression strategies (slower, sometimes smaller).",
+    help="Encode and validate every image without changing public/.",
   )
   args = parser.parse_args()
 
-  requested_root = Path(args.root)
-  if requested_root.is_absolute():
-    root = requested_root
-  else:
-    cwd_root = (Path.cwd() / requested_root).resolve()
-    repo_root = (Path(__file__).resolve().parent.parent / requested_root).resolve()
-    root = cwd_root if cwd_root.exists() else repo_root
-
-  if not root.exists() or not root.is_dir():
-    print(f"Error: directory does not exist: {root}", file=sys.stderr)
+  if not PUBLIC_ROOT.is_dir():
+    print(f"Error: public directory does not exist: {PUBLIC_ROOT}", file=sys.stderr)
     return 1
 
-  png_files = find_png_files(root)
-  if not png_files:
-    print(f"No PNG files found in {root}")
+  cwebp = shutil.which("cwebp")
+  if cwebp is None:
+    print(
+      "Error: cwebp is required but was not found in PATH. "
+      "Install the WebP command-line tools first.",
+      file=sys.stderr,
+    )
+    return 1
+
+  images = find_images(PUBLIC_ROOT)
+  if not images:
+    print(f"No convertible images found in {PUBLIC_ROOT}")
     return 0
+
+  plan, conflicts = build_conversion_plan(images)
+  if conflicts:
+    print("Error: no files were changed because output names conflict:", file=sys.stderr)
+    for conflict in conflicts:
+      print(f"  - {conflict}", file=sys.stderr)
+    print(
+      "Rename or remove the conflicting source files, then run the script again.",
+      file=sys.stderr,
+    )
+    return 1
 
   total_before = 0
   total_after = 0
-  changed_count = 0
+  converted_count = 0
   error_count = 0
 
-  for index, png_file in enumerate(png_files, start=1):
-    print(f"[{index}/{len(png_files)}] Processing {png_file}...", flush=True)
+  for index, source in enumerate(images, start=1):
+    relative_source = source.relative_to(REPO_ROOT)
+    destination = plan[source]
+    relative_destination = destination.relative_to(REPO_ROOT)
+    print(f"[{index}/{len(images)}] {relative_source} -> {relative_destination}", flush=True)
     started = time.perf_counter()
-    result = optimize_png(png_file, dry_run=args.dry_run, thorough=args.thorough)
+    result = convert_image(
+      source,
+      destination=destination,
+      cwebp=cwebp,
+      dry_run=args.dry_run,
+    )
     elapsed = time.perf_counter() - started
     total_before += result.before_size
     total_after += result.after_size
 
     if result.error:
       error_count += 1
-      print(f"ERROR  {png_file}: {result.error} ({elapsed:.2f}s)")
+      print(f"  ERROR: {result.error} ({elapsed:.2f}s)")
       continue
 
-    if result.changed:
-      changed_count += 1
-      saved = result.before_size - result.after_size
-      pct = (saved / result.before_size * 100) if result.before_size else 0.0
-      action = "WOULD OPTIMIZE" if args.dry_run else "OPTIMIZED"
-      print(f"{action}  {png_file}  -{saved} bytes ({pct:.2f}%) ({elapsed:.2f}s)")
-    else:
-      print(f"UNCHANGED  {png_file} ({elapsed:.2f}s)")
+    converted_count += 1
+    action = "WOULD CONVERT" if args.dry_run else "CONVERTED"
+    print(
+      f"  {action}: {result.before_size} -> {result.after_size} bytes "
+      f"({describe_size_change(result.before_size, result.after_size)}) "
+      f"({elapsed:.2f}s)"
+    )
 
-  total_saved = total_before - total_after
-  total_pct = (total_saved / total_before * 100) if total_before else 0.0
   mode = "DRY RUN" if args.dry_run else "DONE"
-
   print()
-  print(f"{mode}: scanned={len(png_files)}, optimized={changed_count}, errors={error_count}")
-  print(f"Total bytes: {total_before} -> {total_after} (saved {total_saved}, {total_pct:.2f}%)")
+  print(
+    f"{mode}: scanned={len(images)}, converted={converted_count}, "
+    f"errors={error_count}"
+  )
+  print(
+    f"Total bytes: {total_before} -> {total_after} "
+    f"({describe_size_change(total_before, total_after)})"
+  )
 
   return 1 if error_count else 0
 
