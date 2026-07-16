@@ -1,0 +1,65 @@
+# Domain-level one-hop redirects for high-value legacy localized paths.
+https://mr-clear.com/secteurs/:slug https://mrclear.ca/lavage-de-vitres-:slug 301!
+https://www.mr-clear.com/secteurs/:slug https://mrclear.ca/lavage-de-vitres-:slug 301!
+https://mr-clear.com/secteurs/:slug/ https://mrclear.ca/lavage-de-vitres-:slug 301!
+https://www.mr-clear.com/secteurs/:slug/ https://mrclear.ca/lavage-de-vitres-:slug 301!
+https://www.mrclear.ca/secteurs/:slug https://mrclear.ca/lavage-de-vitres-:slug 301!
+https://www.mrclear.ca/secteurs/:slug/ https://mrclear.ca/lavage-de-vitres-:slug 301!
+https://mr-clear.com/laval https://mrclear.ca/lavage-de-vitres-laval 301!
+https://mr-clear.com/montreal https://mrclear.ca/lavage-de-vitres-montreal 301!
+https://mr-clear.com/repentigny https://mrclear.ca/lavage-de-vitres-repentigny 301!
+https://mr-clear.com/terrebonne https://mrclear.ca/lavage-de-vitres-terrebonne 301!
+https://mr-clear.com/mascouche https://mrclear.ca/lavage-de-vitres-mascouche 301!
+https://mr-clear.com/assomption https://mrclear.ca/lavage-de-vitres-assomption 301!
+https://mr-clear.com/boisbriand https://mrclear.ca/lavage-de-vitres-boisbriand 301!
+https://mr-clear.com/lorraine https://mrclear.ca/lavage-de-vitres-lorraine 301!
+https://mr-clear.com/rosemere https://mrclear.ca/lavage-de-vitres-rosemere 301!
+https://mr-clear.com/bois-des-filion https://mrclear.ca/lavage-de-vitres-bois-des-filion 301!
+https://www.mr-clear.com/laval https://mrclear.ca/lavage-de-vitres-laval 301!
+https://www.mr-clear.com/montreal https://mrclear.ca/lavage-de-vitres-montreal 301!
+https://www.mr-clear.com/repentigny https://mrclear.ca/lavage-de-vitres-repentigny 301!
+https://www.mr-clear.com/terrebonne https://mrclear.ca/lavage-de-vitres-terrebonne 301!
+https://www.mr-clear.com/mascouche https://mrclear.ca/lavage-de-vitres-mascouche 301!
+https://www.mr-clear.com/assomption https://mrclear.ca/lavage-de-vitres-assomption 301!
+https://www.mr-clear.com/boisbriand https://mrclear.ca/lavage-de-vitres-boisbriand 301!
+https://www.mr-clear.com/lorraine https://mrclear.ca/lavage-de-vitres-lorraine 301!
+https://www.mr-clear.com/rosemere https://mrclear.ca/lavage-de-vitres-rosemere 301!
+https://www.mr-clear.com/bois-des-filion https://mrclear.ca/lavage-de-vitres-bois-des-filion 301!
+
+# Domain canonicalization.
+https://mr-clear.com/* https://mrclear.ca/:splat 301!
+https://www.mr-clear.com/* https://mrclear.ca/:splat 301!
+https://www.mrclear.ca/* https://mrclear.ca/:splat 301!
+
+# Legacy path migrations.
+/soumission /soumission-lavage-de-vitres 301!
+/secteurs/:slug /lavage-de-vitres-:slug 301!
+/secteurs/:slug/ /lavage-de-vitres-:slug 301!
+/lavage-de-vitres-:slug/ /lavage-de-vitres-:slug 301!
+/laval /lavage-de-vitres-laval 301!
+/montreal /lavage-de-vitres-montreal 301!
+/repentigny /lavage-de-vitres-repentigny 301!
+/terrebonne /lavage-de-vitres-terrebonne 301!
+/mascouche /lavage-de-vitres-mascouche 301!
+/assomption /lavage-de-vitres-assomption 301!
+/boisbriand /lavage-de-vitres-boisbriand 301!
+/lorraine /lavage-de-vitres-lorraine 301!
+/rosemere /lavage-de-vitres-rosemere 301!
+/bois-des-filion /lavage-de-vitres-bois-des-filion 301!
+
+# Ensure known localized landing pages resolve normally.
+/lavage-de-vitres-laval /index.html 200
+/lavage-de-vitres-montreal /index.html 200
+/lavage-de-vitres-repentigny /index.html 200
+/lavage-de-vitres-terrebonne /index.html 200
+/lavage-de-vitres-mascouche /index.html 200
+/lavage-de-vitres-assomption /index.html 200
+/lavage-de-vitres-boisbriand /index.html 200
+/lavage-de-vitres-lorraine /index.html 200
+/lavage-de-vitres-rosemere /index.html 200
+/lavage-de-vitres-bois-des-filion /index.html 200
+
+# Unknown localized slugs should not be soft-404s with HTTP 200.
+/lavage-de-vitres-* /index.html 404
+
+/* /index.html 200
