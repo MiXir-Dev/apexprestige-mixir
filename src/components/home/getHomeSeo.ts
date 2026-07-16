@@ -4,7 +4,6 @@ import {
   HOME_SEO_DEFAULT,
   SITE_URL,
 } from "@/consts/seo";
-import { INDEXABLE_SERVICE_AREA_SLUGS } from "@/consts/service-areas";
 import {
   localizeMetaDescription,
   localizeMetaTitle,
@@ -24,37 +23,12 @@ export interface HomeSeoPayload {
   structuredData: Record<string, unknown>;
 }
 
-const LOCAL_KEYWORDS = [
-  "lavage de vitres",
-  "nettoyage de vitres",
-  "lavage de fenêtres",
-  "nettoyage de fenêtres",
-  "lavage de vitres résidentiel",
-  "lavage de vitres commercial",
-  "devis lavage de vitres",
-] as const;
-
-const withCityKeywords = (city: string) => {
-  const localizedTerms = LOCAL_KEYWORDS.map((keyword) => `${keyword} ${city}`);
-  return [...LOCAL_KEYWORDS, ...localizedTerms, city, "Rive-Nord"].join(", ");
-};
-
-const INDEXABLE_SERVICE_AREA_SET = new Set(INDEXABLE_SERVICE_AREA_SLUGS);
-
 export const getHomeSeo = (
   serviceArea?: ServiceAreaPageContent
 ): HomeSeoPayload => {
-  const isIndexableServiceArea = Boolean(
-    serviceArea && INDEXABLE_SERVICE_AREA_SET.has(serviceArea.slug)
-  );
-  const canonicalUrl = serviceArea && isIndexableServiceArea
+  const canonicalUrl = serviceArea
     ? `${SITE_URL}${serviceArea.path}`
     : HOME_SEO_DEFAULT.canonicalUrl;
-  const robots = serviceArea
-    ? isIndexableServiceArea
-      ? "index,follow"
-      : "noindex,follow"
-    : "index,follow";
 
   const description = localizeMetaDescription(
     HOME_SEO_DEFAULT.description,
@@ -62,32 +36,17 @@ export const getHomeSeo = (
   );
 
   const title = localizeMetaTitle(HOME_SEO_DEFAULT.title, serviceArea);
-  const ogTitle = serviceArea
-    ? `Lavage de vitres à ${serviceArea.displayName} | Mr. Clear`
-    : HOME_SEO_DEFAULT.ogTitle;
-
-  const areaServed = serviceArea
-    ? Array.from(
-        new Set([
-          serviceArea.displayName,
-          ...(serviceArea.nearbyAreas ?? []),
-          ...(serviceArea.nearbyRegions ?? []),
-          "Rive-Nord",
-        ])
-      )
-    : [...BASE_LOCAL_BUSINESS_STRUCTURED_DATA.areaServed];
+  const ogTitle = serviceArea ? title : HOME_SEO_DEFAULT.ogTitle;
 
   return {
     title,
     description,
-    keywords: serviceArea
-      ? withCityKeywords(serviceArea.displayName)
-      : HOME_SEO_DEFAULT.keywords,
+    keywords: HOME_SEO_DEFAULT.keywords,
     ogTitle,
     ogDescription: serviceArea ? description : HOME_SEO_DEFAULT.ogDescription,
     ogUrl: canonicalUrl,
     canonicalUrl,
-    robots,
+    robots: "index,follow",
     geoRegion: HOME_SEO_DEFAULT.geoRegion,
     geoPlacename: serviceArea
       ? `${serviceArea.displayName}, Québec, Canada`
@@ -96,7 +55,6 @@ export const getHomeSeo = (
       ...BASE_LOCAL_BUSINESS_STRUCTURED_DATA,
       url: canonicalUrl,
       description,
-      areaServed,
     },
   };
 };

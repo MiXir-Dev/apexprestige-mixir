@@ -21,7 +21,7 @@ const ServiceCard = ({ service }: ServiceCardProps) => {
 
         <img
           src={service.afterImage}
-          alt={`${service.title} - résultat final`}
+          alt={`Après : ${service.title}`}
           className="w-full h-full object-cover absolute inset-0"
           loading="lazy"
         />
@@ -32,7 +32,7 @@ const ServiceCard = ({ service }: ServiceCardProps) => {
         >
           <img
             src={service.beforeImage}
-            alt={`${service.title} - avant service`}
+            alt={`Avant : ${service.title}`}
             className="w-full h-full object-cover"
             loading="lazy"
           />
