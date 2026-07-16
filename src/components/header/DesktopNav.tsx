@@ -18,13 +18,13 @@ const DesktopNav = ({ onNavigate, onQuote }: DesktopNavProps) => {
             event.preventDefault();
             onNavigate(link.id);
           }}
-          className="text-white hover:text-brand-blue font-medium"
+          className="text-brand-blue hover:text-black font-medium"
         >
           {link.label}
         </a>
       ))}
       <Button onClick={onQuote} className="cta-button">
-        Obtenir un devis
+        Obtenir une soumission gratuite
       </Button>
     </nav>
   );

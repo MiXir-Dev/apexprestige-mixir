@@ -1,5 +1,6 @@
 
 import type { Config } from "tailwindcss";
+import tailwindcssAnimate from "tailwindcss-animate";
 
 export default {
 	darkMode: ["class"],
@@ -25,7 +26,7 @@ export default {
 				input: 'hsl(var(--input))',
 				ring: 'hsl(var(--ring))',
 				background: 'hsl(var(--background))',
-				'footer-blue': 'rgb(15 52 96 / <alpha-value>)',
+					'footer-blue': 'rgb(23 23 23 / <alpha-value>)',
 				foreground: 'hsl(var(--foreground))',
 				primary: {
 					DEFAULT: 'hsl(var(--primary))',
@@ -65,13 +66,27 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				// Couleurs personnalisées pour le site de lavage de vitres
-				brand: {
-					blue: "#67badc",
-					light: "#E6EDF5",
-					gray: "#F5F5F5",
-					dark: "#1A1A2E"
-				}
+					gray: {
+						50: '#F8F8F7',
+						100: '#F4F4F2',
+						200: '#D6D6D3',
+						300: '#D6D6D3',
+						400: '#626262',
+						500: '#626262',
+						600: '#626262',
+						700: '#1F1F1F',
+						800: '#1F1F1F',
+						900: '#171717'
+					},
+					brand: {
+						blue: "#171717",
+						light: "#F4F4F2",
+						gray: "#F8F8F7",
+						dark: "#000000",
+						silver: "#D6D6D3",
+						text: "#1F1F1F",
+						secondary: "#626262"
+					}
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
@@ -107,5 +122,5 @@ export default {
 			}
 		}
 	},
-	plugins: [require("tailwindcss-animate")],
+		plugins: [tailwindcssAnimate],
 } satisfies Config;

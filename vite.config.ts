@@ -26,7 +26,7 @@ export default defineConfig({
   plugins: [
     react(),
     sitemapPlugin({
-      hostname: "https://mrclear.ca",
+      hostname: "https://www.apexprestige.ca",
       dynamicRoutes: [
         QUOTE_PATH,
         PRIVACY_PATH,

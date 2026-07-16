@@ -18,7 +18,7 @@ const Logo = ({ isSticky }: LogoProps) => {
         >
           <img
             src="/logo.png"
-            alt="Logo Mr. Clear"
+            alt="Logo d’Apex Prestige Services Extérieurs"
             className="object-contain h-full w-full"
           />
         </div>

@@ -10,6 +10,7 @@ import {
 import { CONTACT } from "@/consts/contact";
 import { NAV_LINKS } from "@/consts/navigation";
 import { buildHomeSectionPath } from "@/consts/paths";
+import { BUSINESS } from "@/consts/business";
 import { Mail, Menu, Phone } from "lucide-react";
 
 interface MobileMenuProps {
@@ -30,7 +31,8 @@ const MobileMenu = ({
       {/* Phone */}
       <a
         href={`tel:${CONTACT.phone}`}
-        className="mr-3 text-white p-2 rounded-full hover:bg-white/20 transition-colors"
+        className="mr-3 text-brand-blue p-2 rounded-full hover:bg-brand-light transition-colors"
+        aria-label={`Appeler le ${CONTACT.phoneDisplay}`}
       >
         <Phone size={20} />
       </a>
@@ -38,7 +40,8 @@ const MobileMenu = ({
       {/* Email */}
       <a
         href={`mailto:${CONTACT.email}`}
-        className="mr-3 text-white p-2 rounded-full hover:bg-white/20 transition-colors"
+        className="mr-3 text-brand-blue p-2 rounded-full hover:bg-brand-light transition-colors"
+        aria-label={`Écrire à ${CONTACT.email}`}
       >
         <Mail size={20} />
       </a>
@@ -49,7 +52,7 @@ const MobileMenu = ({
           <Button
             variant="ghost"
             size="icon"
-            className="text-white hover:bg-white/20"
+            className="text-brand-blue hover:bg-brand-light"
           >
             <Menu className="w-6 h-6" />
             <span className="sr-only">Menu</span>
@@ -65,7 +68,7 @@ const MobileMenu = ({
             <SheetTitle>
               <a href="#" className="flex items-center justify-center">
                 <span className="text-brand-blue font-bold text-xl">
-                  Mr. Clear
+                  {BUSINESS.displayName}
                 </span>
               </a>
             </SheetTitle>
@@ -92,7 +95,7 @@ const MobileMenu = ({
             <div className="px-6 pt-4">
               <SheetClose asChild>
                 <Button onClick={onQuote} className="cta-button w-full">
-                  Obtenir un devis
+                  Obtenir une soumission gratuite
                 </Button>
               </SheetClose>
             </div>
