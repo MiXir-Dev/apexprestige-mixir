@@ -1,25 +1,4 @@
 User-agent: *
 Allow: /
-Allow: /lavage-de-vitres-
 
-# Sitemap
-Sitemap: https://mrclear.ca/sitemap.xml
-
-# Google & Bing specific
-User-agent: Googlebot
-Allow: /
-Allow: /lavage-de-vitres-
-
-User-agent: Bingbot
-Allow: /
-Allow: /lavage-de-vitres-
-
-# Social media crawlers
-User-agent: Twitterbot
-Allow: /
-
-User-agent: facebookexternalhit
-Allow: /
-
-# Encourage faster re-crawling
-Crawl-delay: 1
+Sitemap: https://www.apexprestige.ca/sitemap.xml
