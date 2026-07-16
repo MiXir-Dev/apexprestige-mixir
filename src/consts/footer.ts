@@ -2,14 +2,14 @@ import { ServiceArea } from "@/consts/service-areas";
 import { QUOTE_PATH } from "@/consts/paths";
 
 export const FOOTER_SERVICES = [
-  "Nettoyage de vitres intérieur & extérieur",
-  "Vidage de gouttières",
-  "Services commerciaux",
+  "Vitres, gouttières et soffites",
+  "Revêtements, toiture et lavage à pression",
+  "Pavé uni et entretien extérieur",
 ] as const;
 
 export const FOOTER_QUICK_LINKS = [
   { type: "section", id: "pourquoi-nous", label: "Pourquoi nous choisir" },
-  { type: "route", to: QUOTE_PATH, label: "Demande de devis" },
+  { type: "route", to: QUOTE_PATH, label: "Demande de soumission" },
   { type: "section", id: "faq", label: "FAQ" },
   { type: "section", id: "contact", label: "Contact" },
 ] as const;

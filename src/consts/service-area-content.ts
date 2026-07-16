@@ -2,8 +2,7 @@ import {
   SERVICE_AREAS,
   ServiceArea,
   ServiceAreaSlug,
-} from "@/consts/service-areas";
-import { localizeFaqQuestion, withCity } from "@/lib/localize-service-area";
+} from '@/consts/service-areas';
 
 export interface HomeFaqItem {
   question: string;
@@ -35,406 +34,339 @@ interface ServiceAreaCopyConfig {
   ctaHeading: string;
   ctaSubheading: string;
   contactSupportingCopy: string;
-  faqQuestionVariants: [string, string, string, string];
-  nearbyRegions?: string[];
+  nearbyAreas: string[];
 }
 
 export interface ServiceAreaPageContent extends ServiceArea, HomePageCopy {
   displayName: string;
   fullTitleVariant: string;
   metaDescription: string;
-  nearbyRegions?: string[];
 }
 
 export const DEFAULT_HOME_COPY: HomePageCopy = {
-  heroTitle:
-    "Nettoyage de vitres professionnel sur la Rive-Nord, Laval et Montréal",
+  heroTitle: 'Redonnez du prestige à votre propriété',
   heroSubtitle:
-    "Service complet pour résidences et commerces. Des vitres impeccables, garanties.",
+    'Services extérieurs résidentiels et commerciaux à Sherbrooke, dans les Cantons-de-l’Est et les environs.',
   aboutParagraph:
-    "Depuis plus de 10 ans, nous offrons un service exceptionnel à nos clients résidentiels et commerciaux dans toute la région du Québec.",
+    'Apex Prestige prend en charge le nettoyage et l’entretien des principales surfaces extérieures de votre propriété. Nos services s’adressent aux propriétaires résidentiels ainsi qu’aux entreprises qui souhaitent entretenir leur bâtiment avec une approche adaptée à chaque surface.',
   serviceIntro:
-    "Nous offrons des services professionnels à Laval, Montréal et toute la Rive-Nord (Terrebonne, Repentigny, Mascouche, L'Assomption, Boisbriand, Lorraine, Rosemère, Bois-des-Filion).",
+    'Nettoyage de vitres, de gouttières, de soffites, de revêtements, de toiture et de pavé uni, lavage à pression, coupe de branches, application de pesticides et installation de sable polymère.',
   faqIntro:
-    "Trouvez rapidement des réponses à vos questions concernant nos services de lavage de vitres.",
-  ctaHeading: "Prêt à transformer l'apparence de votre propriété ?",
+    'Voici les réponses aux questions les plus fréquentes concernant les services, les secteurs desservis et les demandes de soumission.',
+  ctaHeading: 'Prêt à redonner du prestige à votre propriété?',
   ctaSubheading:
-    "Un service professionnel qui fait la différence visible. Contactez-nous dès aujourd'hui et voyez par vous-même !",
+    'Décrivez les travaux souhaités et obtenez une soumission adaptée à votre propriété résidentielle ou commerciale.',
   contactSupportingCopy:
-    "Besoin d'informations supplémentaires ou prêt à programmer un service ? Contactez-nous par téléphone, courriel ou via notre formulaire en ligne.",
+    'Une question ou un projet à discuter? Communiquez avec Apex Prestige par téléphone, par courriel ou au moyen du formulaire de soumission.',
   faqItems: [
     {
-      question:
-        "À quelle fréquence devrais-je faire nettoyer mes vitres à la maison ou au bureau ?",
+      question: 'Quels secteurs Apex Prestige dessert-elle?',
       answer:
-        "Pour les résidences situées sur la Rive-Nord ou à Montréal, un lavage de vitres deux fois par an (au printemps et à l'automne) est recommandé. Pour les commerces, surtout ceux exposés à la rue ou aux intempéries, un entretien mensuel ou trimestriel est conseillé afin de préserver une image professionnelle et propre.",
-    },
-    {
-      question: "Offrez-vous vos services de nettoyage de vitres dans ma ville ?",
-      answer:
-        "Nous desservons plusieurs villes de la Rive-Nord, dont Terrebonne, Mascouche, Repentigny, Boisbriand, Lorraine, Rosemère, Bois-des-Filion, ainsi que Laval et Montréal. Consultez notre section 'Zones desservies' pour plus de détails ou contactez-nous directement.",
-    },
-    {
-      question: "Comment préparer ma maison avant le nettoyage des vitres ?",
-      answer:
-        "Veuillez retirer les moustiquaires si possible et dégager l’accès aux fenêtres en déplaçant les meubles ou objets à proximité. Pour l’extérieur, libérez l’espace autour des fenêtres, en particulier près des haies, clôtures ou balcons.",
+        'Apex Prestige dessert Sherbrooke, plusieurs municipalités des Cantons-de-l’Est et les secteurs environnants. La liste complète se trouve dans la section « Zones desservies » du site.',
     },
     {
       question:
-        "Que se passe-t-il en cas de pluie le jour de mon rendez-vous ?",
+        'Offrez-vous vos services aux propriétés résidentielles et commerciales?',
       answer:
-        "En cas de pluie forte ou de conditions météorologiques extrêmes, nous vous contacterons pour reporter l’intervention à une date ultérieure sans aucun frais. Les nettoyages peuvent être effectués sous une pluie légère, car nos produits professionnels garantissent des résultats sans traces.",
+        'Oui. Les services d’Apex Prestige sont offerts aux propriétaires résidentiels ainsi qu’aux entreprises, selon les besoins de la propriété et les travaux demandés.',
+    },
+    {
+      question: 'Comment puis-je demander une soumission?',
+      answer:
+        'Remplissez le formulaire de soumission en indiquant vos coordonnées, l’adresse des travaux, le type de propriété et les services souhaités. Apex Prestige communiquera avec vous pour préciser la demande.',
+    },
+    {
+      question: 'Comment préparer la propriété avant les travaux?',
+      answer:
+        'Assurez-vous que les surfaces concernées sont accessibles et déplacez, lorsque possible, les objets fragiles ou encombrants à proximité. Des consignes supplémentaires pourront être précisées selon le service demandé.',
     },
     {
       question:
-        "Est-ce que Mr. Clear utilise des produits de nettoyage écologiques ?",
+        'Que se passe-t-il si la météo ne permet pas d’effectuer les travaux?',
       answer:
-        "Oui. Nous utilisons des solutions de nettoyage biodégradables, sécuritaires pour les humains, les animaux et l’environnement. C’est une priorité pour nous d’assurer un service propre et responsable.",
+        'La faisabilité des travaux dépend du service et des conditions météorologiques. Si les conditions empêchent l’intervention, Apex Prestige communiquera avec vous pour convenir de la suite.',
     },
     {
-      question:
-        "Vos techniciens sont-ils assurés et formés pour le travail en hauteur ?",
+      question: 'Utilisez-vous la même méthode pour toutes les surfaces?',
       answer:
-        "Absolument. Toute notre équipe est formée aux normes de sécurité du Québec et détient les certifications nécessaires pour travailler en hauteur. Nous sommes également couverts par une assurance responsabilité civile complète.",
+        'Non. La méthode est choisie selon le matériau, l’état de la surface et le résultat recherché afin d’adapter l’intervention à la propriété.',
     },
     {
-      question: "Proposez-vous des forfaits pour les nettoyages réguliers ?",
+      question: 'Comment l’application de pesticides est-elle encadrée?',
       answer:
-        "Oui. Pour les clients commerciaux ou les résidences ayant besoin d’un entretien régulier, nous offrons des forfaits mensuels, bimestriels ou saisonniers à tarif préférentiel. Contactez-nous pour une soumission personnalisée.",
+        'L’application de pesticides est offerte lorsque nécessaire et doit être réalisée selon la réglementation applicable au lieu et au type d’intervention.',
+    },
+    {
+      question: 'Puis-je demander plusieurs services dans une même soumission?',
+      answer:
+        'Oui. Indiquez tous les services souhaités dans le formulaire afin que l’ensemble de la demande puisse être évalué.',
     },
   ],
 };
-
-const buildFaqQuestions = (city: string): [string, string, string, string] => [
-  `${localizeFaqQuestion("À quelle fréquence faire nettoyer ses vitres", city)} ?`,
-  `Offrez-vous le lavage de vitres résidentiel et commercial à ${city} ?`,
-  `Combien de temps prend un nettoyage de fenêtres à ${city} ?`,
-  `Intervenez-vous rapidement pour un service de lavage de vitres à ${city} ?`,
-];
 
 const SERVICE_AREA_COPY: Record<ServiceAreaSlug, ServiceAreaCopyConfig> = {
-  laval: {
-    fullTitleVariant:
-      "Lavage de vitres à Laval | Mr. Clear - Résidentiel et commercial",
+  bromont: {
+    fullTitleVariant: 'Nettoyage extérieur à Bromont | Apex Prestige',
     metaDescription:
-      "Service professionnel de lavage de vitres à Laval pour résidences et commerces. Intervention rapide, travail soigné et soumission gratuite.",
+      'Services de nettoyage extérieur résidentiel et commercial à Bromont : vitres, gouttières, revêtement, toiture, pavé uni et lavage à pression.',
+    heroTitle: 'Services de nettoyage extérieur à Bromont',
+    heroSubtitle:
+      'Apex Prestige prend en charge plusieurs travaux de nettoyage et d’entretien pour les propriétés résidentielles et commerciales de Bromont.',
+    aboutParagraph:
+      'À Bromont, Apex Prestige offre un point de contact unique pour le nettoyage et l’entretien des principales surfaces extérieures de votre propriété.',
+    serviceIntro:
+      'Les services offerts à Bromont comprennent notamment le nettoyage de vitres, de gouttières, de soffites, de revêtements, de toiture et de pavé uni.',
+    ctaHeading: 'Un projet d’entretien extérieur à Bromont?',
+    ctaSubheading:
+      'Présentez les travaux souhaités et demandez une soumission adaptée à votre propriété.',
+    contactSupportingCopy:
+      'Communiquez avec Apex Prestige pour discuter de votre propriété et des services souhaités à Bromont.',
+    nearbyAreas: ['Shefford', 'Magog', 'Orford', 'Valcourt', 'Canton de Valcourt'],
+  },
+  magog: {
+    fullTitleVariant: 'Nettoyage extérieur à Magog | Apex Prestige',
+    metaDescription:
+      'Nettoyage extérieur à Magog pour maisons et commerces : vitres, gouttières, soffites, revêtement, toiture, pavé uni et lavage à pression.',
+    heroTitle: 'Nettoyage et entretien extérieur à Magog',
+    heroSubtitle:
+      'Des services regroupés pour entretenir les vitres, les gouttières et les différentes surfaces extérieures de votre propriété à Magog.',
+    aboutParagraph:
+      'Apex Prestige dessert les propriétés résidentielles et commerciales de Magog avec des services choisis selon les surfaces et les travaux demandés.',
+    serviceIntro:
+      'À Magog, vous pouvez regrouper plusieurs besoins dans une même demande, du nettoyage de vitres jusqu’à l’entretien du pavé uni.',
+    ctaHeading: 'Votre propriété à Magog a besoin d’entretien?',
+    ctaSubheading:
+      'Indiquez les services recherchés et demandez une soumission à Apex Prestige.',
+    contactSupportingCopy:
+      'Pour une demande à Magog, communiquez avec Apex Prestige par téléphone, par courriel ou au moyen du formulaire.',
+    nearbyAreas: [
+      'Orford',
+      'Austin',
+      'North Hatley',
+      'Sainte-Catherine-de-Hatley',
+      'Canton de Hatley',
+    ],
+  },
+  orford: {
+    fullTitleVariant:
+      'Services de nettoyage extérieur à Orford | Apex Prestige',
+    metaDescription:
+      'Services extérieurs résidentiels et commerciaux à Orford : nettoyage de vitres, gouttières, soffites, revêtement, toiture et pavé uni.',
+    heroTitle: 'Des services extérieurs adaptés à votre propriété à Orford',
+    heroSubtitle:
+      'Apex Prestige propose plusieurs services de nettoyage et d’entretien extérieur aux propriétaires et aux entreprises d’Orford.',
+    aboutParagraph:
+      'À Orford, chaque demande est évaluée selon les surfaces concernées, leur état et les services nécessaires à la propriété.',
+    serviceIntro:
+      'Les services disponibles à Orford couvrent les vitres, les gouttières, les soffites, les revêtements, la toiture, le pavé uni et d’autres travaux extérieurs.',
+    ctaHeading: 'Planifiez vos travaux extérieurs à Orford',
+    ctaSubheading:
+      'Décrivez votre projet et obtenez une soumission correspondant aux services demandés.',
+    contactSupportingCopy:
+      'Apex Prestige est disponible pour préciser les besoins de votre propriété à Orford.',
+    nearbyAreas: [
+      'Magog',
+      'Austin',
+      'Saint-Denis-de-Brompton',
+      'Rock Forest',
+      'Deauville',
+    ],
+  },
+  'rock-forest': {
+    fullTitleVariant: 'Nettoyage extérieur à Rock Forest | Apex Prestige',
+    metaDescription:
+      'Nettoyage extérieur résidentiel et commercial à Rock Forest : vitres, gouttières, soffites, revêtement, toiture, pavé uni et pression.',
+    heroTitle: 'Nettoyage extérieur résidentiel et commercial à Rock Forest',
+    heroSubtitle:
+      'Un seul point de contact pour plusieurs travaux de nettoyage et d’entretien autour de votre propriété à Rock Forest.',
+    aboutParagraph:
+      'Apex Prestige dessert Rock Forest pour les demandes résidentielles et commerciales touchant plusieurs types de surfaces extérieures.',
+    serviceIntro:
+      'À Rock Forest, les services peuvent être regroupés dans une même soumission afin de couvrir les différents besoins de la propriété.',
+    ctaHeading: 'Besoin de services extérieurs à Rock Forest?',
+    ctaSubheading:
+      'Présentez les surfaces à entretenir et demandez une soumission gratuite.',
+    contactSupportingCopy:
+      'Communiquez avec Apex Prestige pour discuter d’une intervention résidentielle ou commerciale à Rock Forest.',
+    nearbyAreas: [
+      'Sherbrooke',
+      'Deauville',
+      'Saint-Élie-d’Orford',
+      'Saint-Denis-de-Brompton',
+      'Magog',
+    ],
+  },
+  deauville: {
+    fullTitleVariant: 'Services extérieurs à Deauville | Apex Prestige',
+    metaDescription:
+      'Services de nettoyage extérieur à Deauville pour résidences et commerces : vitres, gouttières, revêtement, toiture, pavé uni et pression.',
+    heroTitle: 'Entretenez l’extérieur de votre propriété à Deauville',
+    heroSubtitle:
+      'Apex Prestige offre à Deauville plusieurs services pour les vitres, les gouttières, les surfaces extérieures et le pavé uni.',
+    aboutParagraph:
+      'À Deauville, Apex Prestige adapte la demande de soumission aux surfaces concernées et aux travaux souhaités par le propriétaire ou l’entreprise.',
+    serviceIntro:
+      'Le nettoyage de vitres, de gouttières, de soffites, de revêtements, de toiture et de pavé uni fait partie des services offerts à Deauville.',
+    ctaHeading: 'Un projet extérieur à Deauville?',
+    ctaSubheading:
+      'Regroupez les services souhaités et demandez une soumission pour votre propriété.',
+    contactSupportingCopy:
+      'Apex Prestige répond aux demandes de services résidentiels et commerciaux à Deauville.',
+    nearbyAreas: [
+      'Rock Forest',
+      'Sherbrooke',
+      'Magog',
+      'Saint-Denis-de-Brompton',
+      'Orford',
+    ],
+  },
+  austin: {
+    fullTitleVariant:
+      'Nettoyage et entretien extérieur à Austin | Apex Prestige',
+    metaDescription:
+      'Nettoyage et entretien extérieur à Austin : vitres, gouttières, soffites, revêtements, toiture, pavé uni et lavage à pression.',
+    heroTitle: 'Des services extérieurs pour votre propriété à Austin',
+    heroSubtitle:
+      'Apex Prestige dessert Austin pour plusieurs besoins de nettoyage et d’entretien extérieur résidentiel ou commercial.',
+    aboutParagraph:
+      'À Austin, les travaux sont déterminés selon le type de propriété, les surfaces à traiter et les services indiqués dans la demande.',
+    serviceIntro:
+      'Les services offerts à Austin comprennent le nettoyage de vitres, de gouttières, de soffites, de revêtements, de toiture et de pavé uni.',
+    ctaHeading: 'Préparez votre projet extérieur à Austin',
+    ctaSubheading:
+      'Décrivez les travaux souhaités afin d’obtenir une soumission adaptée à la propriété.',
+    contactSupportingCopy:
+      'Communiquez avec Apex Prestige pour présenter vos besoins de nettoyage extérieur à Austin.',
+    nearbyAreas: [
+      'Magog',
+      'Orford',
+      'North Hatley',
+      'Sainte-Catherine-de-Hatley',
+      'Canton de Hatley',
+    ],
+  },
+  'north-hatley': {
+    fullTitleVariant: 'Nettoyage extérieur à North Hatley | Apex Prestige',
+    metaDescription:
+      'Services extérieurs résidentiels et commerciaux à North Hatley : vitres, gouttières, soffites, revêtement, toiture et pavé uni.',
+    heroTitle: 'Nettoyage extérieur résidentiel et commercial à North Hatley',
+    heroSubtitle:
+      'Apex Prestige propose des services regroupés pour entretenir les principales surfaces extérieures de votre propriété à North Hatley.',
+    aboutParagraph:
+      'À North Hatley, Apex Prestige prend en charge les demandes touchant les vitres, les gouttières et plusieurs autres surfaces extérieures.',
+    serviceIntro:
+      'Les services disponibles à North Hatley peuvent être sélectionnés séparément ou regroupés dans une même demande de soumission.',
+    ctaHeading: 'Des travaux extérieurs à North Hatley?',
+    ctaSubheading:
+      'Indiquez les services requis et demandez une soumission gratuite à Apex Prestige.',
+    contactSupportingCopy:
+      'Apex Prestige peut préciser avec vous les services souhaités pour votre propriété à North Hatley.',
+    nearbyAreas: [
+      'Canton de Hatley',
+      'Sainte-Catherine-de-Hatley',
+      'Hatley',
+      'Waterville',
+      'Austin',
+    ],
+  },
+  'sainte-catherine-de-hatley': {
+    fullTitleVariant:
+      'Services extérieurs à Sainte-Catherine-de-Hatley | Apex Prestige',
+    metaDescription:
+      'Nettoyage extérieur à Sainte-Catherine-de-Hatley : vitres, gouttières, soffites, revêtement, toiture, pavé uni et lavage à pression.',
     heroTitle:
-      "Service professionnel de lavage de vitres à Laval pour résidences et commerces",
+      'Services de nettoyage extérieur à Sainte-Catherine-de-Hatley',
     heroSubtitle:
-      "Intervention rapide à Laval, travail minutieux et vitres sans traces pour maisons, condos et entreprises.",
+      'Apex Prestige accompagne les propriétaires résidentiels et commerciaux pour plusieurs besoins d’entretien extérieur.',
     aboutParagraph:
-      "À Laval, notre équipe intervient avec méthode pour offrir un nettoyage de vitres fiable, ponctuel et adapté aux besoins résidentiels comme commerciaux.",
+      'À Sainte-Catherine-de-Hatley, chaque demande peut couvrir une ou plusieurs surfaces selon les travaux nécessaires à la propriété.',
     serviceIntro:
-      "Nos services de lavage de vitres à Laval couvrent l'intérieur, l'extérieur, les vitrines commerciales et l'entretien des gouttières.",
-    ctaHeading: "Besoin d'un service de vitres impeccable à Laval ?",
+      'Les services comprennent notamment le nettoyage de vitres, de gouttières, de soffites, de revêtements, de toiture et de pavé uni.',
+    ctaHeading: 'Un projet à Sainte-Catherine-de-Hatley?',
     ctaSubheading:
-      "Obtenez une soumission claire et rapide pour votre propriété résidentielle ou commerciale.",
+      'Transmettez les renseignements sur la propriété et les services que vous souhaitez faire évaluer.',
     contactSupportingCopy:
-      "Vous cherchez un service fiable à Laval ? Notre équipe est disponible pour répondre à vos questions et planifier une intervention rapide.",
-    faqQuestionVariants: buildFaqQuestions("Laval"),
-    nearbyRegions: ["Rive-Nord", "Montréal"],
+      'Communiquez avec Apex Prestige pour discuter d’une demande à Sainte-Catherine-de-Hatley.',
+    nearbyAreas: [
+      'North Hatley',
+      'Canton de Hatley',
+      'Magog',
+      'Austin',
+      'Hatley',
+    ],
   },
-  montreal: {
+  'canton-de-hatley': {
     fullTitleVariant:
-      "Nettoyage de vitres à Montréal | Mr. Clear - Service local de confiance",
+      'Nettoyage extérieur au Canton de Hatley | Apex Prestige',
     metaDescription:
-      "Nettoyage de vitres à Montréal pour maisons, condos, plex et commerces. Service soigné, flexible et adapté à vos horaires.",
-    heroTitle:
-      "Nettoyage de vitres à Montréal pour résidences, condos et commerces",
+      'Services de nettoyage extérieur au Canton de Hatley pour propriétés résidentielles et commerciales : vitres, gouttières, toiture et pavé uni.',
+    heroTitle: 'Nettoyage et entretien extérieur au Canton de Hatley',
     heroSubtitle:
-      "Une équipe fiable pour l'entretien de vos fenêtres à Montréal et sur la Rive-Nord, avec des résultats constants et sans traces.",
+      'Apex Prestige dessert les propriétés résidentielles et commerciales du Canton de Hatley pour plusieurs travaux extérieurs.',
     aboutParagraph:
-      "À Montréal, nous adaptons chaque intervention à la réalité du bâtiment pour livrer un lavage de vitres précis, sécuritaire et efficace.",
+      'Au Canton de Hatley, les services sont sélectionnés selon les surfaces concernées et les besoins indiqués dans la demande de soumission.',
     serviceIntro:
-      "Notre service à Montréal inclut le lavage de fenêtres résidentiel, l'entretien de vitrines commerciales et le nettoyage en hauteur selon les besoins.",
-    ctaHeading: "Prêt à planifier votre nettoyage de vitres à Montréal ?",
+      'Vitres, gouttières, soffites, revêtements, toiture, pavé uni et autres travaux d’entretien peuvent être regroupés dans une même demande.',
+    ctaHeading: 'Entretenez votre propriété au Canton de Hatley',
     ctaSubheading:
-      "Profitez d'un service professionnel, rapide et respectueux de votre espace.",
+      'Présentez les services souhaités et demandez une soumission à Apex Prestige.',
     contactSupportingCopy:
-      "Pour un nettoyage de vitres à Montréal, appelez-nous ou envoyez-nous votre demande en ligne. Nous vous répondons rapidement.",
-    faqQuestionVariants: buildFaqQuestions("Montréal"),
-    nearbyRegions: ["Rive-Nord", "Laval"],
+      'Apex Prestige est disponible pour discuter des travaux extérieurs souhaités au Canton de Hatley.',
+    nearbyAreas: [
+      'North Hatley',
+      'Sainte-Catherine-de-Hatley',
+      'Hatley',
+      'Waterville',
+      'Compton',
+    ],
   },
-  repentigny: {
+  'saint-denis-de-brompton': {
     fullTitleVariant:
-      "Lavage de fenêtres à Repentigny | Mr. Clear - Service professionnel",
+      'Services extérieurs à Saint-Denis-de-Brompton | Apex Prestige',
     metaDescription:
-      "Lavage de vitres à Repentigny pour propriétés résidentielles et commerciales. Équipe professionnelle, service minutieux et devis gratuit.",
-    heroTitle:
-      "Lavage de vitres à Repentigny avec une équipe fiable et expérimentée",
+      'Nettoyage extérieur à Saint-Denis-de-Brompton : vitres, gouttières, soffites, revêtement, toiture, pavé uni et lavage à pression.',
+    heroTitle: 'Services extérieurs à Saint-Denis-de-Brompton',
     heroSubtitle:
-      "Des interventions efficaces à Repentigny pour maintenir des fenêtres propres, lumineuses et impeccables toute l'année.",
+      'Apex Prestige propose plusieurs services de nettoyage et d’entretien pour les propriétés résidentielles et commerciales.',
     aboutParagraph:
-      "Nos clients de Repentigny apprécient notre ponctualité, notre attention aux détails et la constance de nos résultats sur chaque intervention.",
+      'À Saint-Denis-de-Brompton, Apex Prestige évalue les travaux demandés selon le type de surface et les besoins de la propriété.',
     serviceIntro:
-      "À Repentigny, nous proposons un service complet: vitres intérieures et extérieures, cadres, moustiquaires et entretien de gouttières.",
-    ctaHeading: "Vous voulez des vitres nettes à Repentigny ?",
+      'Les services offerts couvrent les vitres, les gouttières, les soffites, les revêtements, la toiture, le pavé uni et d’autres travaux extérieurs.',
+    ctaHeading: 'Un projet extérieur à Saint-Denis-de-Brompton?',
     ctaSubheading:
-      "Recevez une soumission rapide et choisissez un service simple, professionnel et sans surprise.",
+      'Décrivez les travaux et demandez une soumission adaptée aux services recherchés.',
     contactSupportingCopy:
-      "Notre équipe dessert Repentigny avec des plages horaires flexibles pour les maisons, condos et commerces.",
-    faqQuestionVariants: buildFaqQuestions("Repentigny"),
-    nearbyRegions: ["Terrebonne", "Mascouche"],
-  },
-  terrebonne: {
-    fullTitleVariant:
-      "Lavage de vitres à Terrebonne | Mr. Clear - Résultats sans traces",
-    metaDescription:
-      "Service de lavage de vitres à Terrebonne pour résidences et commerces. Travail soigné, équipe courtoise et intervention rapide.",
-    heroTitle:
-      "Service professionnel de lavage de vitres à Terrebonne pour maisons et commerces",
-    heroSubtitle:
-      "Des vitres impeccables à Terrebonne, garanties, avec un service attentif et une exécution rigoureuse.",
-    aboutParagraph:
-      "Depuis plusieurs années, nous aidons les propriétaires de Terrebonne à garder leurs vitres propres grâce à un service stable et bien exécuté.",
-    serviceIntro:
-      "Nos interventions à Terrebonne couvrent le lavage de fenêtres résidentiel, commercial et l'entretien périodique selon vos besoins.",
-    ctaHeading: "Planifiez votre nettoyage de vitres à Terrebonne",
-    ctaSubheading:
-      "Une équipe locale, un service rapide et des résultats visibles dès la première visite.",
-    contactSupportingCopy:
-      "Nous desservons Terrebonne avec un accompagnement simple, de la soumission à la réalisation du service.",
-    faqQuestionVariants: buildFaqQuestions("Terrebonne"),
-    nearbyRegions: ["Mascouche", "Repentigny"],
-  },
-  mascouche: {
-    fullTitleVariant:
-      "Nettoyage de fenêtres à Mascouche | Mr. Clear - Service local",
-    metaDescription:
-      "Nettoyage de vitres à Mascouche pour résidences et entreprises. Service professionnel, ponctuel et adapté à votre bâtiment.",
-    heroTitle: "Nettoyage de vitres à Mascouche pour un résultat net et durable",
-    heroSubtitle:
-      "À Mascouche, nous offrons un service de lavage de fenêtres soigné pour garder votre propriété lumineuse et bien entretenue.",
-    aboutParagraph:
-      "Notre équipe intervient à Mascouche avec une approche structurée pour garantir des vitres propres et une expérience client fluide.",
-    serviceIntro:
-      "À Mascouche, nous réalisons des nettoyages de vitres pour maisons, immeubles résidentiels et commerces avec des méthodes professionnelles.",
-    ctaHeading: "Besoin d'un lavage de vitres à Mascouche ?",
-    ctaSubheading:
-      "Demandez votre devis gratuit et obtenez un service fiable, courtois et efficace.",
-    contactSupportingCopy:
-      "Pour Mascouche, nous proposons des rendez-vous rapides et un suivi simple pour tous vos besoins d'entretien de vitres.",
-    faqQuestionVariants: buildFaqQuestions("Mascouche"),
-    nearbyRegions: ["Terrebonne", "L'Assomption"],
-  },
-  assomption: {
-    fullTitleVariant:
-      "Lavage de vitres à L'Assomption | Mr. Clear - Service résidentiel et commercial",
-    metaDescription:
-      "Lavage de vitres à L'Assomption pour maisons et commerces. Travail minutieux, équipe expérimentée et soumission rapide.",
-    heroTitle: "Service de lavage de vitres à L'Assomption, simple et efficace",
-    heroSubtitle:
-      "Des fenêtres propres et sans traces à L'Assomption grâce à un service professionnel et constant.",
-    aboutParagraph:
-      "À L'Assomption, nous mettons l'accent sur la qualité d'exécution et la fiabilité du service pour chaque type de propriété.",
-    serviceIntro:
-      "Nos services à L'Assomption incluent le lavage de fenêtres résidentiel, l'entretien commercial et les forfaits de nettoyage régulier.",
-    ctaHeading: "Demandez votre soumission à L'Assomption",
-    ctaSubheading:
-      "Obtenez un service professionnel de lavage de vitres avec une équipe attentive à vos attentes.",
-    contactSupportingCopy:
-      "Notre équipe dessert L'Assomption et vous accompagne rapidement pour planifier un entretien ponctuel ou récurrent.",
-    faqQuestionVariants: buildFaqQuestions("L'Assomption"),
-    nearbyRegions: ["Repentigny", "Mascouche"],
-  },
-  boisbriand: {
-    fullTitleVariant:
-      "Nettoyage de vitres à Boisbriand | Mr. Clear - Intervention rapide",
-    metaDescription:
-      "Nettoyage de vitres à Boisbriand pour propriétés résidentielles et commerciales. Service rapide, fiable et sans traces.",
-    heroTitle: "Lavage de vitres à Boisbriand pour maisons, condos et commerces",
-    heroSubtitle:
-      "Intervention rapide à Boisbriand avec un service soigné pour des vitres éclatantes toute l'année.",
-    aboutParagraph:
-      "Les clients de Boisbriand font appel à notre équipe pour un service professionnel, flexible et orienté sur des résultats durables.",
-    serviceIntro:
-      "À Boisbriand, nous prenons en charge le nettoyage de vitres résidentiel et commercial avec des méthodes adaptées à chaque bâtiment.",
-    ctaHeading: "Passez à des vitres impeccables à Boisbriand",
-    ctaSubheading:
-      "Soumission gratuite, équipe expérimentée et planification simple selon votre horaire.",
-    contactSupportingCopy:
-      "Vous êtes à Boisbriand ? Contactez-nous pour un service de lavage de vitres efficace et une réponse rapide.",
-    faqQuestionVariants: buildFaqQuestions("Boisbriand"),
-    nearbyRegions: ["Rosemère", "Lorraine"],
-  },
-  lorraine: {
-    fullTitleVariant:
-      "Lavage de fenêtres à Lorraine | Mr. Clear - Qualité professionnelle",
-    metaDescription:
-      "Service de lavage de vitres à Lorraine pour résidences et commerces. Résultats soignés, service fiable et devis gratuit.",
-    heroTitle: "Lavage de vitres à Lorraine pour des fenêtres toujours impeccables",
-    heroSubtitle:
-      "Un service local à Lorraine, fiable et méticuleux, pour conserver une vue claire et des vitres sans traces.",
-    aboutParagraph:
-      "À Lorraine, nous offrons un nettoyage de fenêtres professionnel qui combine précision, sécurité et constance sur chaque visite.",
-    serviceIntro:
-      "Notre service à Lorraine comprend le lavage intérieur et extérieur des vitres, l'entretien des moustiquaires et des forfaits saisonniers.",
-    ctaHeading: "Besoin d'un nettoyage de vitres à Lorraine ?",
-    ctaSubheading:
-      "Confiez vos fenêtres à une équipe expérimentée et obtenez une soumission rapide.",
-    contactSupportingCopy:
-      "Pour Lorraine, nous proposons un accompagnement personnalisé et des interventions adaptées à votre type de propriété.",
-    faqQuestionVariants: buildFaqQuestions("Lorraine"),
-    nearbyRegions: ["Rosemère", "Boisbriand"],
-  },
-  rosemere: {
-    fullTitleVariant:
-      "Nettoyage de vitres à Rosemère | Mr. Clear - Service de confiance",
-    metaDescription:
-      "Lavage de vitres à Rosemère pour résidences et commerces. Service professionnel, soigné et adapté à vos besoins locaux.",
-    heroTitle: "Service de lavage de vitres à Rosemère, précis et professionnel",
-    heroSubtitle:
-      "À Rosemère, nous aidons les propriétaires à garder des fenêtres propres et lumineuses grâce à un entretien efficace.",
-    aboutParagraph:
-      "Notre équipe dessert Rosemère avec une approche rigoureuse pour assurer des résultats constants, propres et sans compromis.",
-    serviceIntro:
-      "À Rosemère, nous réalisons le lavage de vitres résidentiel et commercial ainsi que l'entretien régulier selon la saison.",
-    ctaHeading: "Obtenez une soumission pour Rosemère",
-    ctaSubheading:
-      "Choisissez un service local, fiable et orienté sur la qualité du résultat final.",
-    contactSupportingCopy:
-      "Nous sommes disponibles pour vos besoins de nettoyage de fenêtres à Rosemère, avec des délais rapides et un service courtois.",
-    faqQuestionVariants: buildFaqQuestions("Rosemère"),
-    nearbyRegions: ["Lorraine", "Boisbriand"],
-  },
-  "bois-des-filion": {
-    fullTitleVariant:
-      "Lavage de vitres à Bois-des-Filion | Mr. Clear - Résidentiel et commercial",
-    metaDescription:
-      "Service de lavage de vitres à Bois-des-Filion pour maisons et commerces. Résultats impeccables, équipe fiable et soumission gratuite.",
-    heroTitle:
-      "Lavage de vitres à Bois-des-Filion avec une équipe locale expérimentée",
-    heroSubtitle:
-      "Des interventions soignées à Bois-des-Filion pour maintenir vos fenêtres propres, claires et sans traces.",
-    aboutParagraph:
-      "À Bois-des-Filion, nous misons sur la qualité du détail et la fiabilité du service pour chaque propriété résidentielle ou commerciale.",
-    serviceIntro:
-      "Nos services à Bois-des-Filion couvrent le lavage de fenêtres, l'entretien de vitres commerciales et les plans réguliers d'entretien.",
-    ctaHeading: "Planifiez votre nettoyage de vitres à Bois-des-Filion",
-    ctaSubheading:
-      "Recevez une estimation rapide et profitez d'un service professionnel adapté à votre bâtiment.",
-    contactSupportingCopy:
-      "Pour Bois-des-Filion, nous répondons rapidement à vos demandes et proposons des rendez-vous flexibles.",
-    faqQuestionVariants: buildFaqQuestions("Bois-des-Filion"),
-    nearbyRegions: ["Terrebonne", "Laval"],
+      'Communiquez avec Apex Prestige pour présenter votre demande à Saint-Denis-de-Brompton.',
+    nearbyAreas: ['Rock Forest', 'Deauville', 'Orford', 'Stoke', 'Sherbrooke'],
   },
 };
 
-const buildLocalizedFaqItems = (
-  city: string,
-  nearbyRegions: string[] | undefined,
-  questions: [string, string, string, string]
-): HomeFaqItem[] => {
-  const cityPreposition = `à ${city}`;
-  const nearbyText = nearbyRegions?.length ? ` et ${nearbyRegions.join(", ")}` : "";
-
-  return [
-    {
-      question: questions[0],
-      answer: `${withCity(
-        "Nous recommandons généralement un nettoyage au printemps et à l'automne pour les résidences",
-        city
-      )}. Pour les commerces, un entretien mensuel ou trimestriel aide à garder une vitrine impeccable en continu.`,
-    },
-    {
-      question: questions[1],
-      answer: `Oui. Nous desservons les maisons, condos, immeubles locatifs et entreprises ${cityPreposition}${nearbyText}. Chaque intervention est adaptée au type de bâtiment et au niveau d'accès.`,
-    },
-    {
-      question: questions[2],
-      answer: `La durée dépend du nombre de fenêtres, de l'accès et de l'état des surfaces. Pour une résidence standard ${cityPreposition}, l'intervention prend souvent entre 1 h 30 et 3 h.`,
-    },
-    {
-      question: questions[3],
-      answer: `Oui. Nous proposons des plages horaires rapides ${cityPreposition} selon la saison et votre secteur. Vous obtenez une soumission claire et un rendez-vous confirmé rapidement.`,
-    },
-  ];
-};
-
-const formatNearbyAreaList = (areas: string[]) => {
-  if (areas.length === 0) {
-    return "";
-  }
-
-  if (areas.length === 1) {
-    return areas[0];
-  }
-
-  return `${areas.slice(0, -1).join(", ")} et ${areas[areas.length - 1]}`;
-};
-
-export const EXACT_NEARBY_AREAS: Record<ServiceAreaSlug, string[]> = {
-  montreal: [
-    "Anjou",
-    "Saint-Léonard",
-    "Ahuntsic-Cartierville",
-    "Rosemont–La Petite-Patrie",
-    "Villeray–Saint-Michel–Parc-Extension",
-  ],
-  laval: [
-    "Chomedey",
-    "Sainte-Dorothée",
-    "Duvernay",
-    "Vimont",
-    "Laval-des-Rapides",
-  ],
-  terrebonne: [
-    "Lachenaie",
-    "La Plaine",
-    "Terrebonne-Ouest",
-    "Mascouche",
-    "Repentigny",
-  ],
-  repentigny: [
-    "Le Gardeur",
-    "Centre-ville",
-    "Du Boisé",
-    "Le Bourg-Neuf",
-    "Vieux-Saint-Paul",
-  ],
-  mascouche: [
-    "Vieux-Mascouche",
-    "La Plaine",
-    "Terrebonne",
-    "Repentigny",
-    "L'Assomption",
-  ],
-  assomption: [
-    "Centre-ville de L'Assomption",
-    "Le Gardeur",
-    "Charlemagne",
-    "Repentigny",
-    "Mascouche",
-  ],
-  boisbriand: [
-    "Sainte-Thérèse",
-    "Rosemère",
-    "Lorraine",
-    "Bois-des-Filion",
-    "Laval",
-  ],
-  lorraine: [
-    "Rosemère",
-    "Boisbriand",
-    "Bois-des-Filion",
-    "Sainte-Thérèse",
-    "Laval",
-  ],
-  rosemere: [
-    "Secteur 1",
-    "Secteur 2",
-    "Secteur 3",
-    "Secteur 4",
-    "Secteur 5",
-  ],
-  "bois-des-filion": [
-    "Lorraine",
-    "Rosemère",
-    "Terrebonne",
-    "Sainte-Thérèse",
-    "Laval",
-  ],
-};
+const buildLocalizedFaqItems = (city: string): HomeFaqItem[] => [
+  {
+    question: `Apex Prestige dessert-elle ${city}?`,
+    answer: `Oui. ${city} fait partie des principaux secteurs desservis par Apex Prestige pour les propriétés résidentielles et commerciales.`,
+  },
+  {
+    question: `Quels services sont offerts à ${city}?`,
+    answer:
+      'Les services comprennent le nettoyage de vitres, de gouttières, de soffites, de revêtements, de toiture et de pavé uni, le lavage à pression, la coupe de branches, l’application de pesticides et le sable polymère.',
+  },
+  {
+    question: `Comment demander une soumission à ${city}?`,
+    answer:
+      'Utilisez le formulaire de soumission et indiquez l’adresse des travaux, le type de propriété et les services souhaités.',
+  },
+  {
+    question: `Puis-je regrouper plusieurs services à ${city}?`,
+    answer:
+      'Oui. Vous pouvez sélectionner plusieurs services dans une même demande afin de présenter l’ensemble des travaux souhaités.',
+  },
+  {
+    question: 'Les travaux sont-ils adaptés au type de surface?',
+    answer:
+      'Oui. La demande est évaluée selon le matériau, l’état de la surface et le service recherché.',
+  },
+];
 
 export const SERVICE_AREA_PAGE_CONTENT: Record<
   ServiceAreaSlug,
@@ -451,21 +383,13 @@ export const SERVICE_AREA_PAGE_CONTENT: Record<
     heroSubtitle: copy.heroSubtitle,
     aboutParagraph: copy.aboutParagraph,
     serviceIntro: copy.serviceIntro,
-    faqIntro: `Questions fréquentes sur le lavage de vitres à ${area.name}.`,
+    faqIntro: DEFAULT_HOME_COPY.faqIntro,
     ctaHeading: copy.ctaHeading,
     ctaSubheading: copy.ctaSubheading,
     contactSupportingCopy: copy.contactSupportingCopy,
-    faqItems: buildLocalizedFaqItems(
-      area.name,
-      copy.nearbyRegions,
-      copy.faqQuestionVariants
-    ),
-    nearbyRegions: copy.nearbyRegions,
-    nearbyAreasTitle: `Secteurs desservis à proximité de ${area.name}`,
-    nearbyAreasIntro: `À ${area.name}, nous desservons aussi ${formatNearbyAreaList(
-      EXACT_NEARBY_AREAS[area.slug]
-    )}.`,
-    nearbyAreas: EXACT_NEARBY_AREAS[area.slug],
+    faqItems: buildLocalizedFaqItems(area.name),
+    nearbyAreasTitle: 'Secteurs à proximité',
+    nearbyAreas: copy.nearbyAreas,
   };
 
   return acc;

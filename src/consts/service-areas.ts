@@ -1,19 +1,19 @@
 import {
   SERVICE_AREA_PATH_PREFIX,
   buildServiceAreaPath,
-} from "./paths";
+} from './paths';
 
 export type ServiceAreaSlug =
-  | "laval"
-  | "montreal"
-  | "repentigny"
-  | "terrebonne"
-  | "mascouche"
-  | "assomption"
-  | "boisbriand"
-  | "lorraine"
-  | "rosemere"
-  | "bois-des-filion";
+  | 'bromont'
+  | 'magog'
+  | 'orford'
+  | 'rock-forest'
+  | 'deauville'
+  | 'austin'
+  | 'north-hatley'
+  | 'sainte-catherine-de-hatley'
+  | 'canton-de-hatley'
+  | 'saint-denis-de-brompton';
 
 export interface ServiceArea {
   slug: ServiceAreaSlug;
@@ -22,28 +22,107 @@ export interface ServiceArea {
 }
 
 export const SERVICE_AREAS: ServiceArea[] = [
-  { slug: "laval", name: "Laval", path: buildServiceAreaPath("laval") },
-  { slug: "montreal", name: "Montréal", path: buildServiceAreaPath("montreal") },
-  { slug: "repentigny", name: "Repentigny", path: buildServiceAreaPath("repentigny") },
-  { slug: "terrebonne", name: "Terrebonne", path: buildServiceAreaPath("terrebonne") },
-  { slug: "mascouche", name: "Mascouche", path: buildServiceAreaPath("mascouche") },
-  { slug: "assomption", name: "L'Assomption", path: buildServiceAreaPath("assomption") },
-  { slug: "boisbriand", name: "Boisbriand", path: buildServiceAreaPath("boisbriand") },
-  { slug: "lorraine", name: "Lorraine", path: buildServiceAreaPath("lorraine") },
-  { slug: "rosemere", name: "Rosemère", path: buildServiceAreaPath("rosemere") },
-  { slug: "bois-des-filion", name: "Bois-des-Filion", path: buildServiceAreaPath("bois-des-filion"), },
+  { slug: 'bromont', name: 'Bromont', path: buildServiceAreaPath('bromont') },
+  { slug: 'magog', name: 'Magog', path: buildServiceAreaPath('magog') },
+  { slug: 'orford', name: 'Orford', path: buildServiceAreaPath('orford') },
+  {
+    slug: 'rock-forest',
+    name: 'Rock Forest',
+    path: buildServiceAreaPath('rock-forest'),
+  },
+  {
+    slug: 'deauville',
+    name: 'Deauville',
+    path: buildServiceAreaPath('deauville'),
+  },
+  { slug: 'austin', name: 'Austin', path: buildServiceAreaPath('austin') },
+  {
+    slug: 'north-hatley',
+    name: 'North Hatley',
+    path: buildServiceAreaPath('north-hatley'),
+  },
+  {
+    slug: 'sainte-catherine-de-hatley',
+    name: 'Sainte-Catherine-de-Hatley',
+    path: buildServiceAreaPath('sainte-catherine-de-hatley'),
+  },
+  {
+    slug: 'canton-de-hatley',
+    name: 'Canton de Hatley',
+    path: buildServiceAreaPath('canton-de-hatley'),
+  },
+  {
+    slug: 'saint-denis-de-brompton',
+    name: 'Saint-Denis-de-Brompton',
+    path: buildServiceAreaPath('saint-denis-de-brompton'),
+  },
 ];
 
-// Roll out local SEO gradually: phase 1 towns go indexable first.
-export const STRATEGY_B_PHASE1_SERVICE_AREA_SLUGS: ServiceAreaSlug[] = [
-  "montreal",
-  "laval",
-  "terrebonne",
-  "repentigny",
-  "mascouche",
-];
+export const FULL_SERVICE_AREA_NAMES = [
+  'Sherbrooke',
+  'Rock Forest',
+  'Deauville',
+  'Fleurimont',
+  'Saint-Élie-d’Orford',
+  'Lennoxville',
+  'Magog',
+  'Orford',
+  'Austin',
+  'Canton de Hatley',
+  'Sainte-Catherine-de-Hatley',
+  'North Hatley',
+  'Ayer’s Cliff',
+  'Ogden',
+  'Stanstead',
+  'Canton de Stanstead',
+  'Hatley',
+  'Windsor',
+  'Val-Joli',
+  'Richmond',
+  'Melbourne',
+  'Canton de Melbourne',
+  'Racine',
+  'Saint-Denis-de-Brompton',
+  'Stoke',
+  'Valcourt',
+  'Canton de Valcourt',
+  'Kingsbury',
+  'Maricourt',
+  'Bonsecours',
+  'Lawrenceville',
+  'Coaticook',
+  'Compton',
+  'Waterville',
+  'Dixville',
+  'Sainte-Edwidge-de-Clifton',
+  'Barnston-Ouest',
+  'East Angus',
+  'Ascot Corner',
+  'Cookshire-Eaton',
+  'Westbury',
+  'Dudswell',
+  'Bury',
+  'Weedon',
+  'Val-des-Sources',
+  'Danville',
+  'Wotton',
+  'Bromont',
+  'Shefford',
+] as const;
 
-export const INDEXABLE_SERVICE_AREA_SLUGS = STRATEGY_B_PHASE1_SERVICE_AREA_SLUGS;
+export const PRINCIPAL_SERVICE_AREA_NAMES = SERVICE_AREAS.map(
+  (area) => area.name
+);
+
+const principalAreaSet = new Set<string>(PRINCIPAL_SERVICE_AREA_NAMES);
+
+export const OTHER_SERVICE_AREA_NAMES = FULL_SERVICE_AREA_NAMES.filter(
+  (area) => !principalAreaSet.has(area)
+);
+
+export const INDEXABLE_SERVICE_AREA_SLUGS: ServiceAreaSlug[] = SERVICE_AREAS.map(
+  (area) => area.slug
+);
 
 export const SERVICE_AREAS_BY_SLUG: Record<ServiceAreaSlug, ServiceArea> =
   SERVICE_AREAS.reduce((acc, area) => {

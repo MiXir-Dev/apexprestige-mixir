@@ -1,41 +1,58 @@
-export type QuoteServiceKey = "exteriorWindows" | "interiorWindows" | "gutterCleaning";
+import { SERVICE_CATALOGUE } from '@/consts/services';
+
+export type QuoteServiceKey = (typeof SERVICE_CATALOGUE)[number]['id'];
 
 export interface QuoteFormData {
-  name: string;
-  address: string;
-  city: string;
-  buildingType: string;
-  floors: string;
-  email: string;
+  firstName: string;
+  lastName: string;
   phone: string;
-  message: string;
+  email: string;
+  address: string;
+  municipality: string;
+  propertyType: string;
+  details: string;
   services: Record<QuoteServiceKey, boolean>;
+  consent: boolean;
+  botField: string;
 }
 
-export const QUOTE_SERVICE_OPTIONS: { id: QuoteServiceKey; label: string }[] = [
-  { id: "exteriorWindows", label: "Nettoyage de vitres extérieur" },
-  { id: "interiorWindows", label: "Nettoyage de vitres intérieur" },
-  { id: "gutterCleaning", label: "Vidage de gouttières" },
-];
+export type QuoteFormErrors = Partial<
+  Record<
+    | 'firstName'
+    | 'lastName'
+    | 'phone'
+    | 'email'
+    | 'address'
+    | 'municipality'
+    | 'propertyType'
+    | 'services'
+    | 'consent',
+    string
+  >
+>;
 
-export const BUILDING_TYPES = [
-  { value: "residential", label: "Résidentiel" },
-  { value: "commercial", label: "Commercial" },
-  { value: "industrial", label: "Industriel" },
+export const QUOTE_SERVICE_OPTIONS = SERVICE_CATALOGUE.map((service) => ({
+  id: service.id,
+  label: service.title,
+}));
+
+export const PROPERTY_TYPES = [
+  { value: 'residential', label: 'Résidentielle' },
+  { value: 'commercial', label: 'Commerciale' },
 ] as const;
 
 export const DEFAULT_QUOTE_FORM_DATA: QuoteFormData = {
-  name: "",
-  address: "",
-  city: "",
-  buildingType: "residential",
-  floors: "",
-  email: "",
-  phone: "",
-  message: "",
-  services: {
-    exteriorWindows: false,
-    interiorWindows: false,
-    gutterCleaning: false,
-  },
+  firstName: '',
+  lastName: '',
+  phone: '',
+  email: '',
+  address: '',
+  municipality: '',
+  propertyType: '',
+  details: '',
+  services: Object.fromEntries(
+    SERVICE_CATALOGUE.map((service) => [service.id, false])
+  ) as Record<QuoteServiceKey, boolean>,
+  consent: false,
+  botField: '',
 };

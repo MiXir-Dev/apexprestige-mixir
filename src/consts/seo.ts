@@ -1,69 +1,45 @@
-import { CONTACT, SOCIAL_LINKS } from "@/consts/contact";
-import { SERVICE_AREAS } from "@/consts/service-areas";
-import { SERVICE_TYPES } from "@/consts/services";
+import { BUSINESS } from '@/consts/business';
+import { FULL_SERVICE_AREA_NAMES } from '@/consts/service-areas';
+import { SERVICE_TYPES } from '@/consts/services';
 
-export const SITE_URL = "https://mrclear.ca";
-export const SITE_NAME = "Mr.Clear";
-export const SITE_LOCALE = "fr_CA";
+export const SITE_URL = BUSINESS.siteUrl;
+export const SITE_NAME = BUSINESS.displayName;
+export const SITE_LOCALE = 'fr_CA';
 export const DEFAULT_SOCIAL_IMAGE_URL = `${SITE_URL}/hero.jpeg`;
-export const DEFAULT_SOCIAL_IMAGE_TYPE = "image/jpeg";
-export const DEFAULT_SOCIAL_IMAGE_WIDTH = "1536";
-export const DEFAULT_SOCIAL_IMAGE_HEIGHT = "1024";
+export const DEFAULT_SOCIAL_IMAGE_TYPE = 'image/jpeg';
+export const DEFAULT_SOCIAL_IMAGE_WIDTH = '1536';
+export const DEFAULT_SOCIAL_IMAGE_HEIGHT = '1024';
 export const DEFAULT_SOCIAL_IMAGE_ALT =
-  "Service de lavage de vitres professionnel Mr.Clear";
+  'Service d’entretien extérieur réalisé par Apex Prestige';
 
 export const HOME_SEO_DEFAULT = {
-  title:
-    "Mr. Clear | Service professionnel de lavage de vitres à Laval, Montréal et Rive-Nord",
+  title: 'Apex Prestige | Nettoyage extérieur dans les Cantons-de-l’Est',
   description:
-    "Entreprise spécialisée en nettoyage de vitres résidentiel et commercial à Laval, Montréal et Rive-Nord. Devis gratuit, service fiable et résultats impeccables!",
+    'Services extérieurs résidentiels et commerciaux : vitres, gouttières, soffites, revêtement, toiture, pavé uni et lavage à pression.',
   keywords:
-    "lavage de vitres, nettoyage de vitres, lavage de fenêtres, prix lavage de vitres, Laval, Montréal, Terrebonne, Repentigny, service nettoyage vitres, entreprise lavage vitre, vidage de gouttières",
-  ogTitle: "Mr. Clear - Service professionnel de lavage de vitres",
+    'nettoyage extérieur, services extérieurs, nettoyage de vitres, nettoyage de gouttières, nettoyage de soffites, lavage à pression, nettoyage de toiture, nettoyage de pavé uni, sable polymère, Sherbrooke, Magog, Bromont, Orford, Cantons-de-l’Est, Apex Prestige',
+  ogTitle: 'Apex Prestige | Services extérieurs résidentiels et commerciaux',
   ogDescription:
-    "Service professionnel de nettoyage de vitres résidentiel et commercial à Terrebonne, Repentigny, sur toute la Rive-Nord, Laval et Montréal",
+    'Nettoyage et entretien extérieur à Sherbrooke, dans les Cantons-de-l’Est et les environs.',
   ogUrl: SITE_URL,
-  geoRegion: "CA-QC",
-  geoPlacename:
-    "Terrebonne, Repentigny, Rive-Nord, Laval, L'Assomption, Boisbriand, Lorraine, Rosemère, Bois-des-Fillion, Mascouche, Montréal",
+  geoRegion: 'CA-QC',
+  geoPlacename: 'Sherbrooke, Magog, Orford, Bromont, Cantons-de-l’Est',
   canonicalUrl: SITE_URL,
 } as const;
 
 export const BASE_LOCAL_BUSINESS_STRUCTURED_DATA = {
-  "@context": "https://schema.org",
-  "@type": "LocalBusiness",
-  name: "Mr. Clear",
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  name: BUSINESS.fullName,
+  alternateName: BUSINESS.displayName,
   description:
-    "Service professionnel de nettoyage de vitres résidentiel et commercial à Laval, Montréal, Terrebonne, Repentigny et toute la Rive-Nord.",
+    'Services de nettoyage et d’entretien extérieur pour les propriétés résidentielles et commerciales à Sherbrooke, dans les Cantons-de-l’Est et les environs.',
   url: SITE_URL,
-  telephone: CONTACT.phone,
-  email: CONTACT.email,
-  address: {
-    "@type": "PostalAddress",
-    addressRegion: "Quebec",
-    addressLocality: "Rive-Nord de Montréal",
-    addressCountry: "CA",
-  },
-  geo: {
-    "@type": "GeoCoordinates",
-    latitude: "45.606649",
-    longitude: "-73.712409",
-  },
-  areaServed: SERVICE_AREAS.map((area) => area.name),
+  telephone: BUSINESS.phone,
+  email: BUSINESS.email,
+  logo: `${SITE_URL}/logo.png`,
+  image: DEFAULT_SOCIAL_IMAGE_URL,
+  areaServed: [...FULL_SERVICE_AREA_NAMES],
   serviceType: SERVICE_TYPES,
-  priceRange: "$$",
-  openingHoursSpecification: {
-    "@type": "OpeningHoursSpecification",
-    dayOfWeek: [
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
-    ],
-    opens: "08:00",
-    closes: "18:00",
-  },
-  sameAs: [SOCIAL_LINKS.facebook, SOCIAL_LINKS.instagram],
+  sameAs: [BUSINESS.facebook],
 } as const;
