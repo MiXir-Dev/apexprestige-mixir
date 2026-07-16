@@ -29,8 +29,8 @@ const CTA = ({
   const navigate = useNavigate();
   const location = useLocation();
   const ctaButtonLabel = cityName
-    ? `Obtenir un devis gratuit à ${cityName}`
-    : "Obtenir un devis gratuit";
+    ? `Obtenir une soumission à ${cityName}`
+    : "Obtenir une soumission gratuite";
   
   // Images pour le carousel
   const carouselImages = [
@@ -80,8 +80,8 @@ const CTA = ({
                     src={image}
                     alt={
                       cityName
-                        ? `Image de lavage de vitres professionnel à ${cityName} ${index + 1}`
-                        : `Image de lavage de vitres professionnel ${index + 1}`
+                        ? `Réalisation d’entretien extérieur par Apex Prestige à ${cityName}, photo ${index + 1}`
+                        : `Réalisation d’entretien extérieur par Apex Prestige, photo ${index + 1}`
                     }
                     className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
                     loading="lazy"

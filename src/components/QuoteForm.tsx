@@ -1,69 +1,171 @@
-import { useEffect, useState } from 'react';
-import { Helmet } from 'react-helmet';
+import { useState } from 'react';
+import type React from 'react';
+import QuoteFormLayout, {
+  SubmissionStatus,
+} from '@/components/quote/QuoteFormLayout';
+import {
+  DEFAULT_QUOTE_FORM_DATA,
+  QuoteFormData,
+  QuoteFormErrors,
+  QuoteServiceKey,
+} from '@/consts/quote';
+import { BUSINESS } from '@/consts/business';
 
-const FORM_ID = 'hu8eft6q';
-const FORM_IFRAME_ID = `crm-form-${FORM_ID}`;
-const FORM_IFRAME_SRC = `https://app.flyra.io/f/${FORM_ID}`;
-const DEFAULT_FORM_HEIGHT_PX = 700;
+const REQUIRED_MESSAGE = 'Ce champ est requis.';
+const SUCCESS_MESSAGE =
+  'Merci! Votre demande a bien été envoyée. Apex Prestige communiquera avec vous pour la suite.';
+const ERROR_MESSAGE = `La demande n’a pas pu être envoyée. Veuillez réessayer ou communiquer avec nous au ${BUSINESS.phoneDisplay}.`;
+
+type TextFieldName =
+  | 'firstName'
+  | 'lastName'
+  | 'phone'
+  | 'email'
+  | 'address'
+  | 'municipality'
+  | 'propertyType';
+
+const validateForm = (formData: QuoteFormData): QuoteFormErrors => {
+  const errors: QuoteFormErrors = {};
+  const requiredFields: TextFieldName[] = [
+    'firstName',
+    'lastName',
+    'phone',
+    'email',
+    'address',
+    'municipality',
+    'propertyType',
+  ];
+
+  requiredFields.forEach((field) => {
+    if (!formData[field].trim()) errors[field] = REQUIRED_MESSAGE;
+  });
+
+  if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+    errors.email = 'Entrez une adresse courriel valide.';
+  }
+
+  if (!Object.values(formData.services).some(Boolean)) {
+    errors.services = 'Sélectionnez au moins un service.';
+  }
+
+  if (!formData.consent) {
+    errors.consent = 'Le consentement est requis.';
+  }
+
+  return errors;
+};
 
 const QuoteForm = () => {
-  const [isIframeLoaded, setIsIframeLoaded] = useState(false);
-  const [iframeHeight, setIframeHeight] = useState(DEFAULT_FORM_HEIGHT_PX);
+  const [formData, setFormData] = useState<QuoteFormData>(
+    DEFAULT_QUOTE_FORM_DATA
+  );
+  const [errors, setErrors] = useState<QuoteFormErrors>({});
+  const [status, setStatus] = useState<SubmissionStatus>('idle');
+  const [resultMessage, setResultMessage] = useState('');
 
-  useEffect(() => {
-    const handleMessage = (event: MessageEvent) => {
-      if (
-        !event.data ||
-        event.data.type !== 'crm-form-resize' ||
-        event.data.id !== FORM_ID ||
-        typeof event.data.height !== 'number'
-      ) {
-        return;
-      }
+  const clearError = (field: keyof QuoteFormErrors) => {
+    setErrors((current) => ({ ...current, [field]: undefined }));
+  };
 
-      setIframeHeight(event.data.height);
+  const handleChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const field = event.target.name as TextFieldName;
+    setFormData((current) => ({ ...current, [field]: event.target.value }));
+    clearError(field);
+  };
+
+  const handleDetailsChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setFormData((current) => ({ ...current, details: event.target.value }));
+  };
+
+  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const service = event.target.name as QuoteServiceKey;
+    setFormData((current) => ({
+      ...current,
+      services: { ...current.services, [service]: event.target.checked },
+    }));
+    clearError('services');
+  };
+
+  const handleConsentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData((current) => ({ ...current, consent: event.target.checked }));
+    clearError('consent');
+  };
+
+  const handleBotFieldChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData((current) => ({ ...current, botField: event.target.value }));
+  };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setResultMessage('');
+
+    const nextErrors = validateForm(formData);
+    setErrors(nextErrors);
+    if (Object.keys(nextErrors).length > 0) {
+      const firstInvalidField = event.currentTarget.querySelector<HTMLElement>(
+        '[aria-invalid="true"]'
+      );
+      firstInvalidField?.focus();
+      return;
+    }
+
+    if (formData.botField) {
+      setStatus('success');
+      setResultMessage(SUCCESS_MESSAGE);
+      return;
+    }
+
+    const payload = {
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      phone: formData.phone,
+      email: formData.email,
+      address: formData.address,
+      municipality: formData.municipality,
+      propertyType: formData.propertyType,
+      services: formData.services,
+      details: formData.details,
+      consent: formData.consent,
+      botField: formData.botField,
     };
 
-    window.addEventListener('message', handleMessage);
+    setStatus('submitting');
 
-    return () => {
-      window.removeEventListener('message', handleMessage);
-    };
-  }, []);
+    try {
+      const response = await fetch('/.netlify/functions/send-quote', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) throw new Error(`Quote API: ${response.status}`);
+
+      setFormData(DEFAULT_QUOTE_FORM_DATA);
+      setStatus('success');
+      setResultMessage(SUCCESS_MESSAGE);
+    } catch (error) {
+      console.error('Erreur lors de l’envoi de la soumission:', error);
+      setStatus('error');
+      setResultMessage(ERROR_MESSAGE);
+    }
+  };
 
   return (
-    <section id="soumission" className="bg-white">
-      <Helmet>
-        <link rel="preconnect" href="https://app.flyra.io" />
-        <link rel="dns-prefetch" href="//app.flyra.io" />
-      </Helmet>
-      <div className="container mx-auto px-4">
-        <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
-          <div className="relative w-full" style={{ minHeight: `${DEFAULT_FORM_HEIGHT_PX}px` }}>
-            {!isIframeLoaded && (
-              <div className="absolute inset-0 z-10 flex items-center justify-center rounded bg-gray-100 text-sm text-gray-700">
-                Soumission lavage de vitre en cours...
-              </div>
-            )}
-            <iframe
-              src={FORM_IFRAME_SRC}
-              style={{
-                width: '100%',
-                height: `${iframeHeight}px`,
-                border: '0',
-                borderRadius: '12px',
-                transition: 'height 0.3s ease, opacity 200ms ease',
-                opacity: isIframeLoaded ? 1 : 0,
-              }}
-              id={FORM_IFRAME_ID}
-              title="Devis Gratuit"
-              loading="lazy"
-              onLoad={() => setIsIframeLoaded(true)}
-            ></iframe>
-          </div>
-        </div>
-      </div>
-    </section>
+    <QuoteFormLayout
+      formData={formData}
+      errors={errors}
+      status={status}
+      resultMessage={resultMessage}
+      onSubmit={handleSubmit}
+      onChange={handleChange}
+      onDetailsChange={handleDetailsChange}
+      onCheckboxChange={handleCheckboxChange}
+      onConsentChange={handleConsentChange}
+      onBotFieldChange={handleBotFieldChange}
+    />
   );
 };
 

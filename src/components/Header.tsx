@@ -60,8 +60,8 @@ const Header = () => {
       className={`sticky top-0 z-50 w-full backdrop-blur-lg backdrop-saturate-150 sticky-header-transition
       ${
         isSticky
-          ? "bg-brand-blue/60 shadow-md py-4"
-          : "bg-[#66a8d3] py-5"
+          ? "bg-white shadow-md py-4"
+          : "bg-white py-5"
       }`}
     >
       <div className="container mx-auto flex items-center justify-between">

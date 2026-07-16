@@ -20,8 +20,8 @@ const About = ({
   const navigate = useNavigate();
   const location = useLocation();
   const imageAlt = cityName
-    ? `Équipe professionnelle de nettoyage de vitres à ${cityName}`
-    : "Équipe professionnelle de nettoyage de vitres";
+    ? `Équipe d’Apex Prestige lors d’un service d’entretien extérieur à ${cityName}`
+    : "Équipe d’Apex Prestige lors d’un service d’entretien extérieur";
   const quoteButtonLabel = cityName
     ? `Obtenir une soumission à ${cityName}`
     : "Obtenir une soumission";
@@ -51,15 +51,15 @@ const About = ({
                 loading="lazy"
               />
               <div className="absolute -bottom-6 -right-6 bg-brand-blue text-white p-6 rounded-lg shadow-lg max-w-xs hidden md:block">
-                <p className="text-3xl font-bold">10+</p>
-                <p className="text-sm mt-1">années d'expérience dans le nettoyage professionnel</p>
+                <p className="text-3xl font-bold">Résidentiel</p>
+                <p className="text-sm mt-1">et commercial</p>
               </div>
             </div>
           </div>
           
           <div className="w-full lg:w-1/2 lg:pl-12">
-            <span className="text-brand-blue font-medium">Pourquoi Nous Choisir</span>
-            <h2 className="text-3xl md:text-4xl font-bold mt-2 mb-6">L'excellence en matière de nettoyage de vitres</h2>
+            <span className="text-brand-blue font-medium">Pourquoi nous choisir</span>
+            <h2 className="text-3xl md:text-4xl font-bold mt-2 mb-6">Une approche soignée pour l’extérieur de votre propriété</h2>
             <p className="text-gray-700 mb-6 text-lg">
               {introParagraph}
             </p>
@@ -72,8 +72,8 @@ const About = ({
                   </svg>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-lg">Expertises spécifiques</h3>
-                  <p className="text-gray-600">Notre équipe est spécialisée dans le traitement des fenêtres difficiles d'accès et des bâtiments de grande hauteur.</p>
+                  <h3 className="font-semibold text-lg">Des services regroupés</h3>
+                  <p className="text-gray-600">Vitres, gouttières, soffites, revêtements, toiture, pavé uni et autres travaux d’entretien extérieur.</p>
                 </div>
               </div>
               
@@ -84,8 +84,8 @@ const About = ({
                   </svg>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-lg">Matériel professionnel</h3>
-                  <p className="text-gray-600">Nous utilisons exclusivement des équipements et produits professionnels respectueux de l'environnement.</p>
+                  <h3 className="font-semibold text-lg">Une intervention adaptée</h3>
+                  <p className="text-gray-600">Chaque demande est évaluée selon la surface, son état et les travaux souhaités.</p>
                 </div>
               </div>
               
@@ -96,8 +96,8 @@ const About = ({
                   </svg>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-lg">Service de confiance</h3>
-                  <p className="text-gray-600">Des centaines de clients satisfaits nous font confiance année après année pour l'entretien de leurs bâtiments.</p>
+                  <h3 className="font-semibold text-lg">Un accompagnement simple</h3>
+                  <p className="text-gray-600">De la soumission à la réalisation, les services prévus sont clairement établis pour votre propriété.</p>
                 </div>
               </div>
             </div>

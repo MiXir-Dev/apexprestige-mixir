@@ -20,8 +20,8 @@ const Hero = ({ title, subtitle, cityName }: HeroProps) => {
   const heroTitle = title ?? DEFAULT_HOME_COPY.heroTitle;
   const heroSubtitle = subtitle ?? DEFAULT_HOME_COPY.heroSubtitle;
   const quoteButtonLabel = cityName
-    ? `Devis gratuit à ${cityName}`
-    : "Obtenir un devis gratuit →";
+    ? `Obtenir une soumission à ${cityName}`
+    : "Obtenir une soumission gratuite";
   const servicesButtonLabel = cityName
     ? `Découvrir nos services à ${cityName}`
     : "Découvrir nos services";
@@ -30,7 +30,7 @@ const Hero = ({ title, subtitle, cityName }: HeroProps) => {
     <section className="relative min-h-[80vh] bg-brand-blue text-white md:min-h-[95vh]">
       <div
         className="absolute inset-0 bg-cover bg-center opacity-90 md:hidden"
-        style={{ backgroundImage: "url('/hero-phone.jpeg')" }}
+        style={{ backgroundImage: "url('/white_house.jpg')" }}
       ></div>
       <div
         className="absolute inset-0 hidden bg-cover bg-center opacity-90 md:block"
@@ -47,15 +47,7 @@ const Hero = ({ title, subtitle, cityName }: HeroProps) => {
             {heroTitle}
           </h1>
           <p className="text-xl md:text-2xl mb-8 font-light">
-            {subtitle ? (
-              heroSubtitle
-            ) : (
-              <>
-                Service complet pour résidences et commerces.{" "}
-                <br className="hidden md:block" />
-                Des vitres impeccables, garanties.
-              </>
-            )}
+            {heroSubtitle}
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
             <Button 
