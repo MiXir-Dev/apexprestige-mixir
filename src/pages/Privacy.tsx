@@ -142,11 +142,12 @@ const Privacy = () => {
                 Fournisseurs de services
               </h2>
               <p>
-                Le site est hébergé sur Netlify et utilise Netlify Forms pour recevoir
-                les demandes de soumission. Ces fournisseurs peuvent traiter des
-                renseignements pour fournir leurs services techniques. Un lien vers
-                Facebook est également offert; toute interaction effectuée sur
-                Facebook est assujettie aux pratiques de confidentialité de Meta.
+                Le site est hébergé sur Netlify et utilise une fonction Netlify pour
+                transmettre les demandes de soumission à Telegram. Ces fournisseurs
+                peuvent traiter des renseignements pour fournir leurs services
+                techniques. Un lien vers Facebook est également offert; toute
+                interaction effectuée sur Facebook est assujettie aux pratiques de
+                confidentialité de Meta.
               </p>
             </section>
 
