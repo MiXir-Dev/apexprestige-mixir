@@ -1,123 +1,94 @@
-import { useEffect, useRef, useState } from "react";
-import type React from "react";
-import { BUILDING_TYPES, QuoteFormData } from "@/consts/quote";
+import { useEffect, useRef, useState } from 'react';
+import type React from 'react';
+import {
+  PROPERTY_TYPES,
+  QuoteFormData,
+  QuoteFormErrors,
+} from '@/consts/quote';
 
 interface AddressSuggestion {
-  place_id: number;
-  display_name: string;
-  lat?: string;
-  lon?: string;
-  address?: {
-    house_number?: string;
-    road?: string;
-    pedestrian?: string;
-    footway?: string;
-    suburb?: string;
-    neighbourhood?: string;
-    quarter?: string;
-    city_district?: string;
-    city?: string;
-    town?: string;
-    village?: string;
-    municipality?: string;
-    hamlet?: string;
-    county?: string;
-    state?: string;
-    postcode?: string;
-  };
+  id: string;
+  address: string;
+  municipality: string;
+  label: string;
 }
 
 interface QuoteLocationFieldsProps {
   formData: QuoteFormData;
-  isAddressValidated: boolean;
+  errors: QuoteFormErrors;
   onChange: (
-    event: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => void;
-  onAddressSelect: (value: { address: string; city: string }) => void;
-  onAddressValidatedChange: (isValid: boolean) => void;
+  onAddressSelect: (address: string, municipality: string) => void;
 }
 
 const QuoteLocationFields = ({
   formData,
-  isAddressValidated,
+  errors,
   onChange,
   onAddressSelect,
-  onAddressValidatedChange,
 }: QuoteLocationFieldsProps) => {
   const [suggestions, setSuggestions] = useState<AddressSuggestion[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [fetchError, setFetchError] = useState("");
-  const [hasAddressBlurred, setHasAddressBlurred] = useState(false);
-  const suppressFetchRef = useRef(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(-1);
+  const [fetchError, setFetchError] = useState('');
+  const suppressSearchRef = useRef(false);
+  const listboxId = 'address-suggestions';
 
   useEffect(() => {
-    if (suppressFetchRef.current) {
-      suppressFetchRef.current = false;
+    if (suppressSearchRef.current) {
+      suppressSearchRef.current = false;
       return;
     }
 
     const query = formData.address.trim();
-    if (query.length < 3) {
+    if (query.length < 4) {
       setSuggestions([]);
-      setIsDropdownOpen(false);
-      setFetchError("");
+      setIsOpen(false);
+      setActiveIndex(-1);
+      setFetchError('');
       return;
     }
 
     const abortController = new AbortController();
     const timeoutId = window.setTimeout(async () => {
       setIsLoading(true);
-      setFetchError("");
+      setFetchError('');
 
       try {
-        const params = new URLSearchParams({
-          q: query,
-          format: "jsonv2",
-          addressdetails: "1",
-          limit: "5",
-          countrycodes: "ca",
-        });
-
+        const parameters = new URLSearchParams({ q: query });
         const response = await fetch(
-          `https://nominatim.openstreetmap.org/search?${params.toString()}`,
-          {
-            signal: abortController.signal,
-          }
+          `/.netlify/functions/address-search?${parameters}`,
+          { signal: abortController.signal }
         );
 
-        if (!response.ok) {
-          throw new Error(`Autocomplete failed: ${response.status}`);
-        }
+        if (!response.ok) throw new Error(`Address API: ${response.status}`);
 
-        const data: unknown = await response.json();
-        const parsedSuggestions = Array.isArray(data)
-          ? data.filter(
-              (item): item is AddressSuggestion =>
-                typeof item === "object" &&
-                item !== null &&
-                "display_name" in item &&
-                "place_id" in item
-            )
-          : [];
+        const result: unknown = await response.json();
+        const nextSuggestions =
+          typeof result === 'object' &&
+          result !== null &&
+          'suggestions' in result &&
+          Array.isArray(result.suggestions)
+            ? (result.suggestions as AddressSuggestion[])
+            : [];
 
-        setSuggestions(parsedSuggestions);
-        setIsDropdownOpen(true);
+        setSuggestions(nextSuggestions);
+        setIsOpen(nextSuggestions.length > 0);
+        setActiveIndex(-1);
       } catch (error) {
-        if (abortController.signal.aborted) {
-          return;
-        }
-        console.error("Erreur autocomplete adresse:", error);
+        if (abortController.signal.aborted) return;
+        console.error('Erreur lors de la recherche d’adresse:', error);
         setSuggestions([]);
-        setFetchError("Impossible de charger les adresses pour le moment.");
+        setIsOpen(false);
+        setFetchError(
+          'Les suggestions sont temporairement indisponibles. Vous pouvez saisir l’adresse manuellement.'
+        );
       } finally {
-        if (!abortController.signal.aborted) {
-          setIsLoading(false);
-        }
+        if (!abortController.signal.aborted) setIsLoading(false);
       }
-    }, 350);
+    }, 450);
 
     return () => {
       abortController.abort();
@@ -125,172 +96,181 @@ const QuoteLocationFields = ({
     };
   }, [formData.address]);
 
-  const resolveCity = (suggestion: AddressSuggestion) => {
-    const address = suggestion.address;
-    return (
-      address?.city ??
-      address?.town ??
-      address?.village ??
-      address?.municipality ??
-      address?.hamlet ??
-      address?.county ??
-      ""
-    );
-  };
-
-  const buildFormattedAddress = (suggestion: AddressSuggestion) => {
-    const address = suggestion.address;
-    const streetName =
-      address?.road ?? address?.pedestrian ?? address?.footway ?? "";
-    const street = [address?.house_number, streetName]
-      .filter(Boolean)
-      .join(" ")
-      .trim();
-    const district =
-      address?.suburb ??
-      address?.neighbourhood ??
-      address?.quarter ??
-      address?.city_district ??
-      "";
-    const city = resolveCity(suggestion);
-    const region = address?.state ?? "";
-    const postalCode = address?.postcode ?? "";
-
-    const compact = [street || district, city, region, postalCode]
-      .filter(Boolean)
-      .join(", ");
-
-    if (compact) {
-      return compact;
-    }
-
-    return suggestion.display_name
-      .split(",")
-      .map((part) => part.trim())
-      .filter(Boolean)
-      .slice(0, 4)
-      .join(", ");
-  };
-
-  const handleAddressInputChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setHasAddressBlurred(false);
-    onAddressValidatedChange(false);
-    onChange(event);
-  };
-
-  const handleSuggestionSelect = (suggestion: AddressSuggestion) => {
-    const formattedAddress = buildFormattedAddress(suggestion);
-
-    suppressFetchRef.current = true;
-    onAddressSelect({
-      address: formattedAddress,
-      city: resolveCity(suggestion),
-    });
-    onAddressValidatedChange(true);
-    setHasAddressBlurred(false);
+  const selectSuggestion = (suggestion: AddressSuggestion) => {
+    suppressSearchRef.current = true;
+    onAddressSelect(suggestion.address, suggestion.municipality);
     setSuggestions([]);
-    setIsDropdownOpen(false);
-    setFetchError("");
+    setIsOpen(false);
+    setActiveIndex(-1);
+    setFetchError('');
   };
 
-  const trimmedAddress = formData.address.trim();
-  const shouldShowAddressValidationError =
-    Boolean(trimmedAddress) &&
-    !isAddressValidated &&
-    hasAddressBlurred &&
-    !isLoading &&
-    suggestions.length === 0;
+  const handleAddressKeyDown = (
+    event: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    if (!isOpen || suggestions.length === 0) return;
+
+    if (event.key === 'ArrowDown') {
+      event.preventDefault();
+      setActiveIndex((current) => (current + 1) % suggestions.length);
+    } else if (event.key === 'ArrowUp') {
+      event.preventDefault();
+      setActiveIndex((current) =>
+        current <= 0 ? suggestions.length - 1 : current - 1
+      );
+    } else if (event.key === 'Enter' && activeIndex >= 0) {
+      event.preventDefault();
+      selectSuggestion(suggestions[activeIndex]);
+    } else if (event.key === 'Escape') {
+      setIsOpen(false);
+      setActiveIndex(-1);
+    }
+  };
 
   return (
     <>
-      <div>
-        <label
-          className="block text-gray-700 font-medium mb-2"
-          htmlFor="buildingType"
-        >
-          Type de bâtiment *
-        </label>
-        <select
-          id="buildingType"
-          name="buildingType"
-          required
-          value={formData.buildingType}
-          onChange={onChange}
-          className="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-brand-blue"
-        >
-          {BUILDING_TYPES.map((type) => (
-            <option key={type.value} value={type.value}>
-              {type.label}
-            </option>
-          ))}
-        </select>
-      </div>
-
       <div className="relative md:col-span-2">
         <label className="block text-gray-700 font-medium mb-2" htmlFor="address">
-          Adresse *
+          Adresse des travaux *
         </label>
         <input
           id="address"
           name="address"
           type="text"
+          role="combobox"
+          aria-autocomplete="list"
+          aria-expanded={isOpen}
+          aria-controls={listboxId}
+          aria-activedescendant={
+            activeIndex >= 0 ? `address-suggestion-${activeIndex}` : undefined
+          }
+          required
+          aria-required="true"
+          aria-invalid={Boolean(errors.address)}
+          aria-describedby={
+            errors.address ? 'address-error address-attribution' : 'address-attribution'
+          }
+          autoComplete="street-address"
           value={formData.address}
-          onChange={handleAddressInputChange}
+          onChange={onChange}
+          onKeyDown={handleAddressKeyDown}
           onFocus={() => {
-            setHasAddressBlurred(false);
-            if (suggestions.length > 0) {
-              setIsDropdownOpen(true);
-            }
+            if (suggestions.length > 0) setIsOpen(true);
           }}
           onBlur={() => {
-            setHasAddressBlurred(true);
-            window.setTimeout(() => setIsDropdownOpen(false), 100);
+            window.setTimeout(() => {
+              setIsOpen(false);
+              setActiveIndex(-1);
+            }, 100);
           }}
-          required
-          autoComplete="off"
-          className={`w-full px-4 py-3 rounded-md border focus:outline-none focus:ring-2 focus:ring-brand-blue ${
-            formData.address && !isAddressValidated
-              ? "border-red-400"
-              : "border-gray-300"
-          }`}
-          placeholder="123 rue Principale"
+          className="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-brand-blue"
         />
-        {shouldShowAddressValidationError ? (
-          <p className="mt-2 text-sm text-red-600">
-            Sélectionnez une adresse proposée pour valider la soumission.
+        {errors.address ? (
+          <p id="address-error" className="mt-2 text-sm text-red-600">
+            {errors.address}
           </p>
         ) : null}
-        {fetchError ? (
-          <p className="mt-1 text-sm text-red-600">{fetchError}</p>
+
+        {isOpen ? (
+          <ul
+            id={listboxId}
+            role="listbox"
+            aria-label="Suggestions d’adresse"
+            className="absolute z-30 mt-1 max-h-64 w-full overflow-y-auto rounded-md border border-gray-200 bg-white py-1 shadow-lg"
+          >
+            {suggestions.map((suggestion, index) => (
+              <li
+                id={`address-suggestion-${index}`}
+                key={suggestion.id}
+                role="option"
+                aria-selected={index === activeIndex}
+                className={`cursor-pointer px-4 py-3 text-sm text-gray-700 transition-colors ${
+                  index === activeIndex
+                    ? 'bg-brand-light text-brand-blue'
+                    : 'hover:bg-gray-50'
+                }`}
+                onMouseDown={(event) => {
+                  event.preventDefault();
+                  selectSuggestion(suggestion);
+                }}
+              >
+                {suggestion.label}
+              </li>
+            ))}
+          </ul>
         ) : null}
 
-        {isDropdownOpen && (isLoading || suggestions.length > 0) ? (
-          <div className="absolute z-20 mt-1 w-full rounded-md border border-gray-200 bg-white shadow-lg">
-            {isLoading ? (
-              <p className="px-4 py-3 text-sm text-gray-500">Recherche en cours...</p>
-            ) : (
-              <ul className="max-h-64 overflow-y-auto py-1">
-                {suggestions.map((suggestion) => (
-                  <li key={suggestion.place_id}>
-                    <button
-                      type="button"
-                      className="w-full px-4 py-3 text-left hover:bg-gray-50"
-                      onMouseDown={() => handleSuggestionSelect(suggestion)}
-                    >
-                      <span className="block text-sm font-medium text-gray-800">
-                        {buildFormattedAddress(suggestion)}
-                      </span>
-                      <span className="block text-xs text-gray-500">
-                        {resolveCity(suggestion) || "Adresse suggérée"}
-                      </span>
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
+        <div id="address-attribution" className="mt-2 flex flex-wrap gap-x-2 text-xs text-gray-500">
+          <span aria-live="polite">
+            {isLoading ? 'Recherche d’adresses…' : fetchError}
+          </span>
+          <a
+            href="https://www.openstreetmap.org/copyright"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline hover:text-brand-blue"
+          >
+            Données © OpenStreetMap
+          </a>
+        </div>
+      </div>
+
+      <div>
+        <label
+          className="block text-gray-700 font-medium mb-2"
+          htmlFor="municipality"
+        >
+          Municipalité *
+        </label>
+        <input
+          id="municipality"
+          name="municipality"
+          type="text"
+          required
+          aria-required="true"
+          aria-invalid={Boolean(errors.municipality)}
+          aria-describedby={errors.municipality ? 'municipality-error' : undefined}
+          autoComplete="address-level2"
+          value={formData.municipality}
+          onChange={onChange}
+          className="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-brand-blue"
+        />
+        {errors.municipality ? (
+          <p id="municipality-error" className="mt-2 text-sm text-red-600">
+            {errors.municipality}
+          </p>
+        ) : null}
+      </div>
+
+      <div>
+        <label
+          className="block text-gray-700 font-medium mb-2"
+          htmlFor="propertyType"
+        >
+          Type de propriété *
+        </label>
+        <select
+          id="propertyType"
+          name="propertyType"
+          required
+          aria-required="true"
+          aria-invalid={Boolean(errors.propertyType)}
+          aria-describedby={errors.propertyType ? 'propertyType-error' : undefined}
+          value={formData.propertyType}
+          onChange={onChange}
+          className="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-brand-blue"
+        >
+          <option value="">Sélectionnez une option</option>
+          {PROPERTY_TYPES.map((type) => (
+            <option key={type.value} value={type.value}>
+              {type.label}
+            </option>
+          ))}
+        </select>
+        {errors.propertyType ? (
+          <p id="propertyType-error" className="mt-2 text-sm text-red-600">
+            {errors.propertyType}
+          </p>
         ) : null}
       </div>
     </>

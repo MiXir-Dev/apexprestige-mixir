@@ -143,7 +143,10 @@ const Privacy = () => {
               </h2>
               <p>
                 Le site est hébergé sur Netlify et utilise une fonction Netlify pour
-                transmettre les demandes de soumission à Telegram. Ces fournisseurs
+                transmettre les demandes de soumission à Telegram. La recherche
+                facultative d’adresse utilise Photon et des données OpenStreetMap;
+                le texte saisi dans le champ d’adresse peut être transmis à ce
+                fournisseur afin de retourner des suggestions. Ces fournisseurs
                 peuvent traiter des renseignements pour fournir leurs services
                 techniques. Un lien vers Facebook est également offert; toute
                 interaction effectuée sur Facebook est assujettie aux pratiques de

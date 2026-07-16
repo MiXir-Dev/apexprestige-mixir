@@ -80,6 +80,12 @@ const QuoteForm = () => {
     setFormData((current) => ({ ...current, details: event.target.value }));
   };
 
+  const handleAddressSelect = (address: string, municipality: string) => {
+    setFormData((current) => ({ ...current, address, municipality }));
+    clearError('address');
+    clearError('municipality');
+  };
+
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const service = event.target.name as QuoteServiceKey;
     setFormData((current) => ({
@@ -162,6 +168,7 @@ const QuoteForm = () => {
       onSubmit={handleSubmit}
       onChange={handleChange}
       onDetailsChange={handleDetailsChange}
+      onAddressSelect={handleAddressSelect}
       onCheckboxChange={handleCheckboxChange}
       onConsentChange={handleConsentChange}
       onBotFieldChange={handleBotFieldChange}
