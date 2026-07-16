@@ -22,17 +22,17 @@ const QuotePage = () => {
   return (
     <div className="min-h-screen flex flex-col bg-white">
       <Helmet>
-        <title>Obtenir un devis | Mr. Clear - Lavage de vitres résidentiel et commercial</title>
+        <title>Soumission gratuite | Apex Prestige Services Extérieurs</title>
         <meta
           name="description"
-          content="Remplissez notre formulaire de soumission pour obtenir un devis personnalisé en 24h. Service rapide et professionnel pour vitres et gouttières."
+          content="Demandez une soumission pour des services extérieurs résidentiels ou commerciaux dans les Cantons-de-l’Est."
         />
         <meta name="robots" content="index,follow" />
         <link rel="canonical" href={pageUrl} />
-        <meta property="og:title" content="Soumission - Mr. Clear" />
+        <meta property="og:title" content="Demandez une soumission | Apex Prestige" />
         <meta
           property="og:description"
-          content="Formulaire pour obtenir un devis personnalisé pour le nettoyage de vitres ou de gouttières. Réponse rapide et professionnelle."
+          content="Présentez les travaux souhaités et demandez une soumission à Apex Prestige Services Extérieurs."
         />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={pageUrl} />
@@ -51,10 +51,10 @@ const QuotePage = () => {
         />
         <meta property="og:image:alt" content={DEFAULT_SOCIAL_IMAGE_ALT} />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Soumission Lavage de Vitres - Mr. Clear" />
+        <meta name="twitter:title" content="Demandez une soumission | Apex Prestige" />
         <meta
           name="twitter:description"
-          content="Formulaire pour obtenir un devis personnalisé pour le nettoyage de vitres ou de gouttières. Réponse rapide et professionnelle."
+          content="Présentez les travaux souhaités et demandez une soumission à Apex Prestige Services Extérieurs."
         />
         <meta name="twitter:url" content={pageUrl} />
         <meta name="twitter:image" content={DEFAULT_SOCIAL_IMAGE_URL} />
