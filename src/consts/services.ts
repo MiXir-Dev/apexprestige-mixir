@@ -10,22 +10,22 @@ export const SERVICES: ServiceItem[] = [
     title: 'Vitres, gouttières et soffites',
     description:
       'Nettoyage intérieur et extérieur des vitres, retrait des débris dans les gouttières, nettoyage de leurs surfaces extérieures et entretien des soffites pour les propriétés résidentielles et commerciales.',
-    beforeImage: '/before-inside.webp',
-    afterImage: '/after-inside.webp',
+    beforeImage: '/beforeafter/before-inside.webp',
+    afterImage: '/beforeafter/after-inside.webp',
   },
   {
     title: 'Revêtements, toiture et lavage à pression',
     description:
       'Nettoyage adapté aux revêtements de vinyle, d’aluminium, de bois et à d’autres surfaces extérieures, ainsi que nettoyage de toiture et lavage à pression selon le matériau et l’état de la surface.',
-    beforeImage: '/before-gutter-cleaning.webp',
-    afterImage: '/after-gutter-cleaning.webp',
+    beforeImage: '/beforeafter/before-gutter-cleaning.webp',
+    afterImage: '/beforeafter/after-gutter-cleaning.webp',
   },
   {
     title: 'Pavé uni et entretien extérieur',
     description:
       'Nettoyage de pavé uni, installation ou remplacement de sable polymère, coupe de branches ciblée et application de pesticides selon la réglementation applicable.',
-    beforeImage: '/before-outside.webp',
-    afterImage: '/after-outside.webp',
+    beforeImage: '/beforeafter/before-outside.webp',
+    afterImage: '/beforeafter/after-outside.webp',
   },
 ];
 
