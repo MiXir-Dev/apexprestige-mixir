@@ -10,6 +10,7 @@ import {
   DEFAULT_SOCIAL_IMAGE_TYPE,
   DEFAULT_SOCIAL_IMAGE_URL,
   DEFAULT_SOCIAL_IMAGE_WIDTH,
+  DEFAULT_X_SOCIAL_IMAGE_URL,
   SITE_LOCALE,
   SITE_NAME,
   SITE_URL,
@@ -53,7 +54,7 @@ const Privacy = () => {
         />
         <meta name="twitter:description" content={SEO_DESCRIPTION} />
         <meta name="twitter:url" content={pageUrl} />
-        <meta name="twitter:image" content={DEFAULT_SOCIAL_IMAGE_URL} />
+        <meta name="twitter:image" content={DEFAULT_X_SOCIAL_IMAGE_URL} />
         <meta name="twitter:image:alt" content={DEFAULT_SOCIAL_IMAGE_ALT} />
       </Helmet>
       <Header />

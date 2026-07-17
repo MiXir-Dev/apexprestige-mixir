@@ -7,6 +7,7 @@ import {
   DEFAULT_SOCIAL_IMAGE_TYPE,
   DEFAULT_SOCIAL_IMAGE_URL,
   DEFAULT_SOCIAL_IMAGE_WIDTH,
+  DEFAULT_X_SOCIAL_IMAGE_URL,
   SITE_LOCALE,
   SITE_NAME,
 } from "@/consts/seo";
@@ -45,7 +46,7 @@ const HomeSeo = ({ serviceArea }: HomeSeoProps) => {
       <meta name="twitter:title" content={seo.ogTitle} />
       <meta name="twitter:description" content={seo.ogDescription} />
       <meta name="twitter:url" content={seo.ogUrl} />
-      <meta name="twitter:image" content={DEFAULT_SOCIAL_IMAGE_URL} />
+      <meta name="twitter:image" content={DEFAULT_X_SOCIAL_IMAGE_URL} />
       <meta name="twitter:image:alt" content={DEFAULT_SOCIAL_IMAGE_ALT} />
       <meta name="robots" content={seo.robots} />
       <meta name="geo.region" content={seo.geoRegion} />
