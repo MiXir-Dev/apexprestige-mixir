@@ -36,6 +36,10 @@ const Hero = ({ title, subtitle, cityName }: HeroProps) => {
         className="absolute inset-0 hidden bg-cover bg-center opacity-90 md:block"
         style={{ backgroundImage: "url('/hero.webp')" }}
       ></div>
+      <div
+        className="absolute inset-0 bg-gradient-to-r from-black/30 via-black/15 to-transparent"
+        aria-hidden="true"
+      ></div>
       <div className="container relative mx-auto flex min-h-[80vh] items-center px-4 py-20 md:min-h-[95vh] md:py-32">
         <div className="max-w-3xl">
           <h1 className="
