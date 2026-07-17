@@ -40,7 +40,7 @@ const ContactDetails = () => {
           <Clock className="h-5 w-5 text-brand-blue" />
         </div>
         <div>
-          <p className="font-medium">Heures d'ouverture</p>
+          <p className="font-medium">Disponibilité</p>
           <p className="text-gray-600">{CONTACT.hours}</p>
         </div>
       </div>
