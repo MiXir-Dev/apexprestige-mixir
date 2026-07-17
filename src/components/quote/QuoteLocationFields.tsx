@@ -13,6 +13,62 @@ interface AddressSuggestion {
   label: string;
 }
 
+interface PhotonFeature {
+  properties?: {
+    osm_id?: number;
+    osm_type?: string;
+    countrycode?: string;
+    housenumber?: string;
+    street?: string;
+    name?: string;
+    city?: string;
+    locality?: string;
+    district?: string;
+    county?: string;
+    state?: string;
+    postcode?: string;
+  };
+}
+
+const getText = (value: unknown) =>
+  typeof value === 'string' ? value.trim() : '';
+
+const formatPhotonSuggestion = (
+  feature: PhotonFeature
+): AddressSuggestion | null => {
+  const properties = feature.properties;
+  if (!properties) return null;
+
+  const countryCode = getText(properties.countrycode).toUpperCase();
+  const street = getText(properties.street) || getText(properties.name);
+  const municipality =
+    getText(properties.city) ||
+    getText(properties.locality) ||
+    getText(properties.district) ||
+    getText(properties.county);
+
+  if ((countryCode && countryCode !== 'CA') || !street || !municipality) {
+    return null;
+  }
+
+  const streetAddress = [getText(properties.housenumber), street]
+    .filter(Boolean)
+    .join(' ');
+  const postcode = getText(properties.postcode);
+  const state = getText(properties.state);
+  const address = [streetAddress, postcode].filter(Boolean).join(', ');
+  const label = [streetAddress, municipality, state, postcode]
+    .filter(Boolean)
+    .join(', ');
+
+  return {
+    id: `${properties.osm_type ?? ''}-${properties.osm_id ?? ''}-${label}`,
+    address,
+    municipality,
+    label,
+  };
+};
+
 interface QuoteLocationFieldsProps {
   formData: QuoteFormData;
   errors: QuoteFormErrors;
@@ -32,7 +88,6 @@ const QuoteLocationFields = ({
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(-1);
-  const [fetchError, setFetchError] = useState('');
   const suppressSearchRef = useRef(false);
   const listboxId = 'address-suggestions';
 
@@ -47,17 +102,20 @@ const QuoteLocationFields = ({
       setSuggestions([]);
       setIsOpen(false);
       setActiveIndex(-1);
-      setFetchError('');
       return;
     }
 
     const abortController = new AbortController();
     const timeoutId = window.setTimeout(async () => {
       setIsLoading(true);
-      setFetchError('');
 
       try {
-        const parameters = new URLSearchParams({ q: query });
+        const parameters = new URLSearchParams({
+          q: query,
+          limit: '5',
+          lang: 'fr',
+          countrycode: 'CA',
+        });
         const response = await fetch(
           `/.netlify/functions/address-search?${parameters}`,
           { signal: abortController.signal }
@@ -66,25 +124,26 @@ const QuoteLocationFields = ({
         if (!response.ok) throw new Error(`Address API: ${response.status}`);
 
         const result: unknown = await response.json();
-        const nextSuggestions =
+        const features =
           typeof result === 'object' &&
           result !== null &&
-          'suggestions' in result &&
-          Array.isArray(result.suggestions)
-            ? (result.suggestions as AddressSuggestion[])
+          'features' in result &&
+          Array.isArray(result.features)
+            ? (result.features as PhotonFeature[])
             : [];
+        const nextSuggestions = features
+          .map(formatPhotonSuggestion)
+          .filter((suggestion): suggestion is AddressSuggestion =>
+            Boolean(suggestion)
+          );
 
         setSuggestions(nextSuggestions);
         setIsOpen(nextSuggestions.length > 0);
         setActiveIndex(-1);
-      } catch (error) {
+      } catch {
         if (abortController.signal.aborted) return;
-        console.error('Erreur lors de la recherche d’adresse:', error);
         setSuggestions([]);
         setIsOpen(false);
-        setFetchError(
-          'Les suggestions sont temporairement indisponibles. Vous pouvez saisir l’adresse manuellement.'
-        );
       } finally {
         if (!abortController.signal.aborted) setIsLoading(false);
       }
@@ -102,7 +161,6 @@ const QuoteLocationFields = ({
     setSuggestions([]);
     setIsOpen(false);
     setActiveIndex(-1);
-    setFetchError('');
   };
 
   const handleAddressKeyDown = (
@@ -140,6 +198,7 @@ const QuoteLocationFields = ({
           role="combobox"
           aria-autocomplete="list"
           aria-expanded={isOpen}
+          aria-busy={isLoading}
           aria-controls={listboxId}
           aria-activedescendant={
             activeIndex >= 0 ? `address-suggestion-${activeIndex}` : undefined
@@ -147,9 +206,7 @@ const QuoteLocationFields = ({
           required
           aria-required="true"
           aria-invalid={Boolean(errors.address)}
-          aria-describedby={
-            errors.address ? 'address-error address-attribution' : 'address-attribution'
-          }
+          aria-describedby={errors.address ? 'address-error' : undefined}
           autoComplete="street-address"
           value={formData.address}
           onChange={onChange}
@@ -199,20 +256,6 @@ const QuoteLocationFields = ({
             ))}
           </ul>
         ) : null}
-
-        <div id="address-attribution" className="mt-2 flex flex-wrap gap-x-2 text-xs text-gray-500">
-          <span aria-live="polite">
-            {isLoading ? 'Recherche d’adresses…' : fetchError}
-          </span>
-          <a
-            href="https://www.openstreetmap.org/copyright"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline hover:text-brand-blue"
-          >
-            Données © OpenStreetMap
-          </a>
-        </div>
       </div>
 
       <div>
