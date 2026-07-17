@@ -45,7 +45,7 @@ const About = ({
           <div className="w-full lg:w-1/2 mb-10 lg:mb-0 lg:pr-12">
             <div className="relative">
               <img 
-                src="/about.png" 
+                src="/about.webp" 
                 alt={imageAlt}
                 className="rounded-lg shadow-lg w-full object-cover"
                 loading="lazy"

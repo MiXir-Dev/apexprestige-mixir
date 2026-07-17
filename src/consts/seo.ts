@@ -5,8 +5,8 @@ import { SERVICE_TYPES } from '@/consts/services';
 export const SITE_URL = BUSINESS.siteUrl;
 export const SITE_NAME = BUSINESS.displayName;
 export const SITE_LOCALE = 'fr_CA';
-export const DEFAULT_SOCIAL_IMAGE_URL = `${SITE_URL}/hero.jpeg`;
-export const DEFAULT_SOCIAL_IMAGE_TYPE = 'image/jpeg';
+export const DEFAULT_SOCIAL_IMAGE_URL = `${SITE_URL}/hero.webp`;
+export const DEFAULT_SOCIAL_IMAGE_TYPE = 'image/webp';
 export const DEFAULT_SOCIAL_IMAGE_WIDTH = '1536';
 export const DEFAULT_SOCIAL_IMAGE_HEIGHT = '1024';
 export const DEFAULT_SOCIAL_IMAGE_ALT =
@@ -37,7 +37,7 @@ export const BASE_LOCAL_BUSINESS_STRUCTURED_DATA = {
   url: SITE_URL,
   telephone: BUSINESS.phone,
   email: BUSINESS.email,
-  logo: `${SITE_URL}/logo.png`,
+  logo: `${SITE_URL}/logo.webp`,
   image: DEFAULT_SOCIAL_IMAGE_URL,
   areaServed: [...FULL_SERVICE_AREA_NAMES],
   serviceType: SERVICE_TYPES,

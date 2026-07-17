@@ -5,7 +5,7 @@ const FooterServices = () => {
   return (
     <div>
       <h3 className="text-lg font-semibold mb-4 border-b border-white/20 pb-2">
-        Nos Services
+        Nos services
       </h3>
       <ul className="space-y-2">
         {FOOTER_SERVICES.map((service) => (
