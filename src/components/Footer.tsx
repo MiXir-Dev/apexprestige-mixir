@@ -9,14 +9,28 @@ const Footer = () => {
 
   return (
     <footer className="bg-brand-blue text-white">
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div className="container mx-auto px-4 py-12 lg:py-16">
+        <div
+          className="
+            grid gap-10
+            pb-10
+            lg:grid-cols-[1.2fr_0.9fr_1.1fr]
+            lg:gap-14
+          "
+        >
           <FooterBrand />
-          <FooterServices />
-          <FooterQuickLinks />
+
+          <div className="grid grid-cols-2 gap-8">
+            <FooterServices />
+            <FooterQuickLinks />
+          </div>
+
           <FooterServiceAreas />
         </div>
-        <FooterBottom currentYear={currentYear} />
+
+        <div className="pt-6">
+          <FooterBottom currentYear={currentYear} />
+        </div>
       </div>
     </footer>
   );
