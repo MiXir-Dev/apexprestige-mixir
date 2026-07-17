@@ -1,9 +1,8 @@
 import { Mail, MapPin, Phone } from "lucide-react";
-import { Link } from "react-router-dom";
 
+import Logo from "@/components/header/Logo";
 import { BUSINESS } from "@/consts/business";
 import { CONTACT, SOCIAL_LINKS } from "@/consts/contact";
-import { HOME_PATH } from "@/consts/paths";
 
 interface FacebookIconProps {
   className?: string;
@@ -23,20 +22,9 @@ const FacebookIcon = ({ className }: FacebookIconProps) => (
 const FooterBrand = () => {
   return (
     <div>
-      <Link
-        to={HOME_PATH}
-        className="
-          inline-block
-          rounded-sm
-          focus-visible:outline-none
-          focus-visible:ring-2
-          focus-visible:ring-white
-        "
-      >
-        <h2 className="text-2xl font-bold tracking-tight text-white">
-          {BUSINESS.displayName}
-        </h2>
-      </Link>
+      <div className="w-16 shrink-0 brightness-0 invert">
+        <Logo isSticky={false} />
+      </div>
 
       <p className="mt-4 max-w-md text-sm leading-6 text-white/65">
         Services professionnels de nettoyage et d’entretien extérieur pour les
