@@ -166,6 +166,13 @@ const Privacy = () => {
                 ajouté ultérieurement, la présente politique et les mécanismes de
                 consentement devront être mis à jour avant son activation.
               </p>
+              <p className="mt-3">
+                Un brouillon du formulaire est conservé dans le stockage local de
+                votre navigateur afin de préserver les renseignements saisis si vous
+                quittez la page avant l’envoi. Ce brouillon est supprimé après un
+                envoi réussi et peut aussi être retiré en effaçant les données du
+                site dans votre navigateur.
+              </p>
             </section>
 
             <section>
