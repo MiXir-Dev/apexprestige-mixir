@@ -34,12 +34,12 @@ const CTA = ({
   
   // Images pour le carousel
   const carouselImages = [
-    "/sub-carousel-2.webp",
-    "/sub-carousel-1.webp",
-    "/sub-carousel-6.webp",
-    "/sub-carousel-3.webp",
-    "/sub-carousel-4.webp",
-    "/sub-carousel-5.webp",
+    "/carousel/sub-carousel-2.webp",
+    "/carousel/sub-carousel-1.webp",
+    "/carousel/sub-carousel-6.webp",
+    "/carousel/sub-carousel-3.webp",
+    "/carousel/sub-carousel-4.webp",
+    "/carousel/sub-carousel-5.webp",
   ];
 
   return (
