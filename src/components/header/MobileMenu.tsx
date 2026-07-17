@@ -1,4 +1,4 @@
-import { Mail, Menu, Phone } from "lucide-react";
+import { Menu, Phone } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -62,23 +62,6 @@ const MobileMenu = ({
         aria-label={`Appeler le ${CONTACT.phoneDisplay}`}
       >
         <Phone className="h-5 w-5" aria-hidden="true" />
-      </a>
-
-      {/* Email */}
-      <a
-        href={`mailto:${CONTACT.email}`}
-        className="
-          mr-1 rounded-full p-2
-          text-white/80
-          transition-colors duration-200
-          hover:bg-white/10 hover:text-white
-          focus-visible:outline-none
-          focus-visible:ring-2
-          focus-visible:ring-white
-        "
-        aria-label={`Écrire à ${CONTACT.email}`}
-      >
-        <Mail className="h-5 w-5" aria-hidden="true" />
       </a>
 
       {/* Facebook */}
@@ -207,19 +190,6 @@ const MobileMenu = ({
               >
                 <Phone className="h-4 w-4" aria-hidden="true" />
                 <span>{CONTACT.phoneDisplay}</span>
-              </a>
-
-              <a
-                href={`mailto:${CONTACT.email}`}
-                className="
-                  flex items-center gap-3 py-2
-                  text-sm text-white/70
-                  transition-colors
-                  hover:text-white
-                "
-              >
-                <Mail className="h-4 w-4" aria-hidden="true" />
-                <span>{CONTACT.email}</span>
               </a>
 
               {SOCIAL_LINKS.facebook && (
