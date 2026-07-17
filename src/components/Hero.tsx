@@ -30,7 +30,7 @@ const Hero = ({ title, subtitle, cityName }: HeroProps) => {
     <section className="relative min-h-[80vh] bg-brand-blue text-white md:min-h-[95vh]">
       <div
         className="absolute inset-0 bg-cover bg-center opacity-90 md:hidden"
-        style={{ backgroundImage: "url('/white_house.webp')" }}
+        style={{ backgroundImage: "url('/hero-phone.webp')" }}
       ></div>
       <div
         className="absolute inset-0 hidden bg-cover bg-center opacity-90 md:block"
