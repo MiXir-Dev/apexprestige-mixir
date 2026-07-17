@@ -9,8 +9,11 @@ interface DesktopNavProps {
 
 const DesktopNav = ({ onNavigate, onQuote }: DesktopNavProps) => {
   return (
-    <nav className="hidden md:flex items-center space-x-8">
-      {NAV_LINKS.map((link) => ( 
+    <nav
+      className="hidden items-center space-x-8 md:flex"
+      aria-label="Navigation principale"
+    >
+      {NAV_LINKS.map((link) => (
         <a
           key={link.id}
           href={buildHomeSectionPath(link.id)}
@@ -18,12 +21,33 @@ const DesktopNav = ({ onNavigate, onQuote }: DesktopNavProps) => {
             event.preventDefault();
             onNavigate(link.id);
           }}
-          className="text-brand-blue hover:text-black font-medium"
+          className="
+            font-medium text-white/80
+            transition-colors duration-200
+            hover:text-white
+            focus-visible:outline-none
+            focus-visible:ring-2
+            focus-visible:ring-white
+            focus-visible:ring-offset-2
+            focus-visible:ring-offset-brand-blue
+          "
         >
           {link.label}
         </a>
       ))}
-      <Button onClick={onQuote} className="cta-button">
+
+      <Button
+        type="button"
+        onClick={onQuote}
+        className="
+          bg-white text-brand-blue
+          shadow-none
+          transition-colors duration-200
+          hover:bg-brand-light hover:text-brand-dark
+          focus-visible:ring-white
+          focus-visible:ring-offset-brand-blue
+        "
+      >
         Obtenir une soumission gratuite
       </Button>
     </nav>
