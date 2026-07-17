@@ -189,7 +189,7 @@ const QuoteLocationFields = ({
     <>
       <div className="relative md:col-span-2">
         <label className="block text-gray-700 font-medium mb-2" htmlFor="address">
-          Adresse des travaux *
+          Adresse *
         </label>
         <input
           id="address"
