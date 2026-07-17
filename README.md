@@ -15,7 +15,7 @@ pages.
 - React Router
 - Tailwind CSS
 - Radix UI and shadcn-style components
-- Netlify hosting and server-side functions for Telegram quote notifications and Photon address suggestions
+- Netlify hosting, Telegram quote notifications, and Photon address suggestions
 
 ## Commands
 
