@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type React from 'react';
 import QuoteFormLayout, {
   SubmissionStatus,
@@ -15,6 +15,7 @@ const REQUIRED_MESSAGE = 'Ce champ est requis.';
 const SUCCESS_MESSAGE =
   'Merci! Votre demande a bien été envoyée. Apex Prestige communiquera avec vous pour la suite.';
 const ERROR_MESSAGE = `La demande n’a pas pu être envoyée. Veuillez réessayer ou communiquer avec nous au ${BUSINESS.phoneDisplay}.`;
+const FORM_STORAGE_KEY = 'apex-prestige-quote-draft';
 
 type TextFieldName =
   | 'firstName'
@@ -24,6 +25,49 @@ type TextFieldName =
   | 'address'
   | 'municipality'
   | 'propertyType';
+
+const getStoredFormData = (): QuoteFormData => {
+  if (typeof window === 'undefined') return DEFAULT_QUOTE_FORM_DATA;
+
+  try {
+    const storedValue = window.localStorage.getItem(FORM_STORAGE_KEY);
+    if (!storedValue) return DEFAULT_QUOTE_FORM_DATA;
+
+    const parsed: unknown = JSON.parse(storedValue);
+    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+      return DEFAULT_QUOTE_FORM_DATA;
+    }
+
+    const draft = parsed as Partial<QuoteFormData>;
+    const storedServices =
+      draft.services && typeof draft.services === 'object'
+        ? draft.services
+        : {};
+
+    return {
+      firstName: typeof draft.firstName === 'string' ? draft.firstName : '',
+      lastName: typeof draft.lastName === 'string' ? draft.lastName : '',
+      phone: typeof draft.phone === 'string' ? draft.phone : '',
+      email: typeof draft.email === 'string' ? draft.email : '',
+      address: typeof draft.address === 'string' ? draft.address : '',
+      municipality:
+        typeof draft.municipality === 'string' ? draft.municipality : '',
+      propertyType:
+        typeof draft.propertyType === 'string' ? draft.propertyType : '',
+      details: typeof draft.details === 'string' ? draft.details : '',
+      services: Object.fromEntries(
+        Object.keys(DEFAULT_QUOTE_FORM_DATA.services).map((service) => [
+          service,
+          storedServices[service as QuoteServiceKey] === true,
+        ])
+      ) as QuoteFormData['services'],
+      consent: draft.consent === true,
+      botField: '',
+    };
+  } catch {
+    return DEFAULT_QUOTE_FORM_DATA;
+  }
+};
 
 const validateForm = (formData: QuoteFormData): QuoteFormErrors => {
   const errors: QuoteFormErrors = {};
@@ -57,12 +101,25 @@ const validateForm = (formData: QuoteFormData): QuoteFormErrors => {
 };
 
 const QuoteForm = () => {
-  const [formData, setFormData] = useState<QuoteFormData>(
-    DEFAULT_QUOTE_FORM_DATA
-  );
+  const [formData, setFormData] = useState<QuoteFormData>(getStoredFormData);
   const [errors, setErrors] = useState<QuoteFormErrors>({});
   const [status, setStatus] = useState<SubmissionStatus>('idle');
   const [resultMessage, setResultMessage] = useState('');
+  const skipNextPersistenceRef = useRef(false);
+
+  useEffect(() => {
+    if (skipNextPersistenceRef.current) {
+      skipNextPersistenceRef.current = false;
+      return;
+    }
+
+    try {
+      const { botField: _botField, ...draft } = formData;
+      window.localStorage.setItem(FORM_STORAGE_KEY, JSON.stringify(draft));
+    } catch {
+      // The form remains fully usable when browser storage is unavailable.
+    }
+  }, [formData]);
 
   const clearError = (field: keyof QuoteFormErrors) => {
     setErrors((current) => ({ ...current, [field]: undefined }));
@@ -149,6 +206,8 @@ const QuoteForm = () => {
 
       if (!response.ok) throw new Error(`Quote API: ${response.status}`);
 
+      skipNextPersistenceRef.current = true;
+      window.localStorage.removeItem(FORM_STORAGE_KEY);
       setFormData(DEFAULT_QUOTE_FORM_DATA);
       setStatus('success');
       setResultMessage(SUCCESS_MESSAGE);
