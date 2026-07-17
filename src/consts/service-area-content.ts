@@ -46,7 +46,7 @@ export interface ServiceAreaPageContent extends ServiceArea, HomePageCopy {
 export const DEFAULT_HOME_COPY: HomePageCopy = {
   heroTitle: 'Redonnez du prestige à votre propriété',
   heroSubtitle:
-    'Services extérieurs résidentiels et commerciaux à Sherbrooke, dans les Cantons-de-l’Est et les environs.',
+    'Services extérieurs résidentiels et commerciaux à Sherbrooke, Magog, Orford, Bromont et dans les municipalités environnantes.',
   aboutParagraph:
     'Apex Prestige prend en charge le nettoyage et l’entretien des principales surfaces extérieures de votre propriété. Nos services s’adressent aux propriétaires résidentiels ainsi qu’aux entreprises qui souhaitent entretenir leur bâtiment avec une approche adaptée à chaque surface.',
   serviceIntro:
@@ -62,7 +62,7 @@ export const DEFAULT_HOME_COPY: HomePageCopy = {
     {
       question: 'Quels secteurs Apex Prestige dessert-elle?',
       answer:
-        'Apex Prestige dessert Sherbrooke, plusieurs municipalités des Cantons-de-l’Est et les secteurs environnants. La liste complète se trouve dans la section « Zones desservies » du site.',
+        'Apex Prestige dessert Sherbrooke, Magog, Orford, Bromont et les municipalités environnantes. La liste complète se trouve dans la section « Zones desservies » du site.',
     },
     {
       question:

@@ -10,5 +10,5 @@ export const BUSINESS = {
   facebook:
     'https://www.facebook.com/share/1Si7jahVVe/?mibextid=wwXIfr',
   availability: 'Sur rendez-vous',
-  areaSummary: 'Sherbrooke, les Cantons-de-l’Est et les environs',
+  areaSummary: 'Sherbrooke, Magog, Orford, Bromont et les environs',
 } as const;

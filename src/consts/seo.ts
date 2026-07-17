@@ -13,17 +13,17 @@ export const DEFAULT_SOCIAL_IMAGE_ALT =
   'Service d’entretien extérieur réalisé par Apex Prestige';
 
 export const HOME_SEO_DEFAULT = {
-  title: 'Apex Prestige | Nettoyage extérieur dans les Cantons-de-l’Est',
+  title: 'Apex Prestige | Nettoyage extérieur à Sherbrooke et environs',
   description:
-    'Services extérieurs résidentiels et commerciaux : vitres, gouttières, soffites, revêtement, toiture, pavé uni et lavage à pression.',
+    'Services de nettoyage extérieur résidentiel et commercial à Sherbrooke, Magog, Orford, Bromont et dans les municipalités environnantes : vitres, gouttières, soffites, revêtement, toiture, pavé uni et lavage à pression.',
   keywords:
-    'nettoyage extérieur, services extérieurs, nettoyage de vitres, nettoyage de gouttières, nettoyage de soffites, lavage à pression, nettoyage de toiture, nettoyage de pavé uni, sable polymère, Sherbrooke, Magog, Bromont, Orford, Cantons-de-l’Est, Apex Prestige',
-  ogTitle: 'Apex Prestige | Services extérieurs résidentiels et commerciaux',
+    'nettoyage extérieur Sherbrooke, nettoyage de vitres Sherbrooke, nettoyage de gouttières Sherbrooke, lavage à pression Sherbrooke, nettoyage extérieur Magog, nettoyage extérieur Orford, nettoyage extérieur Bromont, nettoyage de toiture, nettoyage de pavé uni, sable polymère, Apex Prestige',
+  ogTitle: 'Apex Prestige | Services de nettoyage extérieur à Sherbrooke',
   ogDescription:
-    'Nettoyage et entretien extérieur à Sherbrooke, dans les Cantons-de-l’Est et les environs.',
+    'Nettoyage et entretien extérieur à Sherbrooke, Magog, Orford, Bromont et dans les municipalités environnantes.',
   ogUrl: SITE_URL,
   geoRegion: 'CA-QC',
-  geoPlacename: 'Sherbrooke, Magog, Orford, Bromont, Cantons-de-l’Est',
+  geoPlacename: 'Sherbrooke, Magog, Orford, Bromont',
   canonicalUrl: SITE_URL,
 } as const;
 
@@ -33,7 +33,7 @@ export const BASE_LOCAL_BUSINESS_STRUCTURED_DATA = {
   name: BUSINESS.fullName,
   alternateName: BUSINESS.displayName,
   description:
-    'Services de nettoyage et d’entretien extérieur pour les propriétés résidentielles et commerciales à Sherbrooke, dans les Cantons-de-l’Est et les environs.',
+    'Services de nettoyage et d’entretien extérieur pour les propriétés résidentielles et commerciales à Sherbrooke, Magog, Orford, Bromont et dans les municipalités environnantes.',
   url: SITE_URL,
   telephone: BUSINESS.phone,
   email: BUSINESS.email,

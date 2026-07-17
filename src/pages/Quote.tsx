@@ -25,7 +25,7 @@ const QuotePage = () => {
         <title>Soumission gratuite | Apex Prestige Services Extérieurs</title>
         <meta
           name="description"
-          content="Demandez une soumission pour des services extérieurs résidentiels ou commerciaux dans les Cantons-de-l’Est."
+          content="Demandez une soumission pour des services extérieurs résidentiels ou commerciaux à Sherbrooke, Magog, Orford, Bromont et dans les municipalités environnantes."
         />
         <meta name="robots" content="index,follow" />
         <link rel="canonical" href={pageUrl} />
