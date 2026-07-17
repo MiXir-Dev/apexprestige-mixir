@@ -36,7 +36,6 @@ const CTA = ({
   const carouselImages = [
     "/carousel/sub-carousel-2.webp",
     "/carousel/sub-carousel-1.webp",
-    "/carousel/sub-carousel-6.webp",
     "/carousel/sub-carousel-3.webp",
     "/carousel/sub-carousel-4.webp",
     "/carousel/sub-carousel-5.webp",
