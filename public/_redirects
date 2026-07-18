@@ -1,6 +1,3 @@
-# Canonical production hostname.
-https://apexprestige.ca/* https://www.apexprestige.ca/:splat 301!
-
 # Legacy quote route from the fork.
 /soumission-lavage-de-vitres /soumission-services-exterieurs 301!
 
