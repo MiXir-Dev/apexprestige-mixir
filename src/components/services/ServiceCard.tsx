@@ -10,7 +10,7 @@ const ServiceCard = ({ service }: ServiceCardProps) => {
     useCompareSlider();
 
   return (
-    <article className="group overflow-hidden rounded-xl border border-white/10 bg-brand-blue shadow-[0_12px_35px_rgba(0,0,0,0.14)] transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:shadow-[0_20px_45px_rgba(0,0,0,0.22)]">
+    <article className="group overflow-hidden rounded-xl border border-white/10 bg-brand-blue shadow-[0_12px_35px_rgba(0,0,0,0.14)] transition-all duration-300 hover:border-white/20 hover:shadow-[0_20px_45px_rgba(0,0,0,0.22)]">
       <div
         ref={containerRef}
         className={`relative h-64 cursor-grab select-none overflow-hidden ${
