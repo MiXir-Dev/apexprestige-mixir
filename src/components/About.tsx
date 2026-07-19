@@ -45,10 +45,13 @@ const About = ({
           <div className="w-full lg:w-1/2 mb-10 lg:mb-0 lg:pr-12">
             <div className="relative">
               <img 
-                src="/about.webp" 
+                src="/about.webp"
                 alt={imageAlt}
                 className="rounded-lg shadow-lg w-full object-cover"
                 loading="lazy"
+                decoding="async"
+                width="965"
+                height="1280"
               />
               <div className="absolute -bottom-6 -right-6 bg-brand-blue text-white p-6 rounded-lg shadow-lg max-w-xs hidden md:block">
                 <p className="text-3xl font-bold">Résidentiel</p>

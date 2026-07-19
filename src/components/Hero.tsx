@@ -28,14 +28,22 @@ const Hero = ({ title, subtitle, cityName }: HeroProps) => {
 
   return (
     <section className="relative min-h-[80vh] bg-brand-blue text-white md:min-h-[95vh]">
-      <div
-        className="absolute inset-0 bg-cover bg-center opacity-90 md:hidden"
-        style={{ backgroundImage: "url('/hero-phone.webp')" }}
-      ></div>
-      <div
-        className="absolute inset-0 hidden bg-cover bg-center opacity-90 md:block"
-        style={{ backgroundImage: "url('/hero.webp')" }}
-      ></div>
+      <picture className="absolute inset-0 block opacity-90" aria-hidden="true">
+        <source
+          media="(min-width: 768px)"
+          srcSet="/hero.webp"
+        />
+        <img
+          src="/hero-phone.webp"
+          alt=""
+          width="941"
+          height="1672"
+          className="h-full w-full object-cover object-center"
+          loading="eager"
+          fetchPriority="high"
+          decoding="async"
+        />
+      </picture>
       <div
         className="absolute inset-0 bg-gradient-to-r from-black/30 via-black/15 to-transparent"
         aria-hidden="true"

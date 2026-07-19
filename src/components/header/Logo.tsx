@@ -20,6 +20,9 @@ const Logo = ({ isSticky }: LogoProps) => {
             src="/logo-header.webp"
             alt="Logo d’Apex Prestige Services Extérieurs"
             className="object-contain h-full w-full"
+            width="80"
+            height="80"
+            decoding="async"
           />
         </div>
       </a>
