@@ -10,14 +10,16 @@ const ServiceCard = ({ service }: ServiceCardProps) => {
     useCompareSlider();
 
   return (
-    <div className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
+    <article className="group overflow-hidden rounded-xl border border-white/10 bg-brand-blue shadow-[0_12px_35px_rgba(0,0,0,0.14)] transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:shadow-[0_20px_45px_rgba(0,0,0,0.22)]">
       <div
         ref={containerRef}
-        className="relative h-64 overflow-hidden cursor-grab select-none"
+        className={`relative h-64 cursor-grab select-none overflow-hidden ${
+          isDragging ? 'cursor-grabbing' : ''
+        }`}
         onMouseDown={handleMouseDown}
         onTouchStart={handleTouchStart}
       >
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-70 z-10"></div>
+        <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/75 via-black/5 to-black/40"></div>
 
         <img
           src={service.afterImage}
@@ -38,16 +40,19 @@ const ServiceCard = ({ service }: ServiceCardProps) => {
           />
         </div>
 
-        <div className="absolute inset-y-0 z-20 touch-none" style={{ left: `${sliderValue}%` }}>
-          <div className="absolute inset-y-0 w-[2px] bg-white/80 backdrop-blur-sm"></div>
+        <div
+          className="absolute inset-y-0 z-20 touch-none"
+          style={{ left: `${sliderValue}%` }}
+        >
+          <div className="absolute inset-y-0 w-px bg-white/90 shadow-[0_0_10px_rgba(255,255,255,0.45)]"></div>
           <div
-            className={`absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-12 h-12 bg-white/40 backdrop-blur-md border border-white/60 rounded-full shadow-lg flex items-center justify-center cursor-grab transition-all duration-300 ${
-              isDragging ? "scale-110 shadow-xl" : ""
+            className={`absolute top-1/2 flex h-12 w-12 -translate-x-1/2 -translate-y-1/2 cursor-grab items-center justify-center rounded-full border border-white/25 bg-brand-blue/95 text-white shadow-[0_8px_24px_rgba(0,0,0,0.35)] backdrop-blur-md transition-all duration-300 group-hover:border-white/50 ${
+              isDragging ? 'scale-110 cursor-grabbing border-white/70 shadow-xl' : ''
             }`}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5 text-brand-blue"
+              className="h-5 w-5 text-white"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -62,19 +67,23 @@ const ServiceCard = ({ service }: ServiceCardProps) => {
           </div>
         </div>
 
-        <div className="flex justify-between text-xs text-white absolute bottom-4 inset-x-0 px-4 z-20 font-medium">
-          <span>Avant</span>
-          <span>Après</span>
+        <div className="absolute inset-x-0 bottom-4 z-20 flex justify-between px-4 text-[11px] font-semibold uppercase tracking-[0.14em] text-white">
+          <span className="rounded-full border border-white/15 bg-black/55 px-3 py-1.5 backdrop-blur-sm">
+            Avant
+          </span>
+          <span className="rounded-full border border-white/15 bg-black/55 px-3 py-1.5 backdrop-blur-sm">
+            Après
+          </span>
         </div>
 
-        <h3 className="absolute top-4 left-4 text-white text-xl font-semibold z-20 shadow-text">
+        <h3 className="shadow-text absolute left-4 top-4 z-20 rounded-full border border-white/15 bg-black/55 px-3.5 py-2 text-base font-semibold text-white backdrop-blur-sm">
           {service.title}
         </h3>
       </div>
-      <div className="p-6">
-        <p className="text-gray-600">{service.description}</p>
+      <div className="border-t border-white/10 p-6">
+        <p className="leading-relaxed text-white/70">{service.description}</p>
       </div>
-    </div>
+    </article>
   );
 };
 
