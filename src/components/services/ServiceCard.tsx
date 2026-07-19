@@ -67,16 +67,16 @@ const ServiceCard = ({ service }: ServiceCardProps) => {
           </div>
         </div>
 
-        <div className="absolute inset-x-0 bottom-4 z-20 flex justify-between px-4 text-[11px] font-semibold uppercase tracking-[0.14em] text-white">
-          <span className="rounded-full border border-white/15 bg-black/55 px-3 py-1.5 backdrop-blur-sm">
+        <div className="absolute inset-x-0 bottom-4 z-20 flex justify-between px-3 text-[9px] font-semibold uppercase tracking-[0.12em] text-white sm:px-4 sm:text-[11px] sm:tracking-[0.14em]">
+          <span className="rounded-full border border-white/15 bg-black/55 px-2.5 py-1 backdrop-blur-sm sm:px-3 sm:py-1.5">
             Avant
           </span>
-          <span className="rounded-full border border-white/15 bg-black/55 px-3 py-1.5 backdrop-blur-sm">
+          <span className="rounded-full border border-white/15 bg-black/55 px-2.5 py-1 backdrop-blur-sm sm:px-3 sm:py-1.5">
             Après
           </span>
         </div>
 
-        <h3 className="shadow-text absolute left-4 top-4 z-20 rounded-full border border-white/15 bg-black/55 px-3.5 py-2 text-base font-semibold text-white backdrop-blur-sm">
+        <h3 className="shadow-text absolute left-3 top-3 z-20 rounded-full border border-white/15 bg-black/55 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur-sm sm:left-4 sm:top-4 sm:px-3.5 sm:py-2 sm:text-base">
           {service.title}
         </h3>
       </div>

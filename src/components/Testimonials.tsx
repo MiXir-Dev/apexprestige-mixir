@@ -101,9 +101,6 @@ const Testimonials = () => {
             Découvrez les commentaires de clients ayant fait confiance à Apex
             Prestige pour l’entretien de leur propriété.
           </p>
-          <p className="mt-3 hidden text-xs text-gray-400 md:block">
-            Survolez les témoignages pour mettre le défilement en pause.
-          </p>
         </header>
 
         <div className="relative">
@@ -145,9 +142,6 @@ const Testimonials = () => {
           </Carousel>
         </div>
 
-        <p className="mt-6 text-center text-xs text-gray-400 md:hidden">
-          Faites glisser pour découvrir les autres témoignages.
-        </p>
       </div>
     </section>
   );
